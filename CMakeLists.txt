@@ -84,7 +84,7 @@ endif ()
 
 # Data: ----------------------------------------------------------------------------------------------------------------
 if (ALP_BUILD_TESTING OR ALP_BUILD_PUBLICATION OR ALP_BUILD_BENCHMARKING)
-    include_directories(${CMAKE_SOURCE_DIR}/data/include)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/data/include)
 endif ()
 
 # Gtest: ---------------------------------------------------------------------------------------------------------------
