@@ -247,8 +247,8 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 		    (samples_size * (Constants<PT>::EXCEPTION_SIZE))}; // worst scenario
 
 		// We try all combinations in search for the one which minimize the compression size
-		for (uint8_t exp_ref = Constants<PT>::MAX_EXPONENT; exp_ref >= 0; exp_ref--) {
-			for (uint8_t factor_idx = exp_ref; factor_idx >= 0; factor_idx--) {
+		for (int8_t exp_ref = Constants<PT>::MAX_EXPONENT; exp_ref >= 0; exp_ref--) {
+			for (int8_t factor_idx = exp_ref; factor_idx >= 0; factor_idx--) {
 				uint16_t exceptions_count           = {0};
 				uint16_t non_exceptions_count       = {0};
 				uint32_t estimated_bits_per_value   = {0};
@@ -258,8 +258,10 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 
 				for (size_t i = 0; i < samples_size; i++) {
 					const PT actual_value  = smp_arr[smp_offset + i];
-					const ST encoded_value = encode_value<PT, ST>(actual_value, factor_idx, exp_ref);
-					const PT decoded_value = decoder<PT>::decode_value(encoded_value, factor_idx, exp_ref);
+					const ST encoded_value = encode_value<PT, ST>(
+					    actual_value, static_cast<uint8_t>(factor_idx), static_cast<uint8_t>(exp_ref));
+					const PT decoded_value = decoder<PT>::decode_value(
+					    encoded_value, static_cast<uint8_t>(factor_idx), static_cast<uint8_t>(exp_ref));
 					if (decoded_value == actual_value) {
 						non_exceptions_count++;
 						if (encoded_value > max_encoded_value) { max_encoded_value = encoded_value; }
@@ -285,8 +287,8 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 				     (found_factor < factor_idx)) // We prefer bigger factors
 				) {
 					sample_estimated_compression_size = estimated_compression_size;
-					found_exponent                    = exp_ref;
-					found_factor                      = factor_idx;
+					found_exponent                    = static_cast<uint8_t>(exp_ref);
+					found_factor                      = static_cast<uint8_t>(factor_idx);
 					if (sample_estimated_compression_size < best_estimated_compression_size) {
 						best_estimated_compression_size = sample_estimated_compression_size;
 					}
