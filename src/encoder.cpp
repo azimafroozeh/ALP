@@ -25,7 +25,7 @@ bool is_impossible_to_encode(const PT n) {
 template <typename PT, typename ST>
 ST encode_value(const PT value, const factor_idx_t factor_idx, const exponent_idx_t exponent_idx) {
 	PT tmp_encoded_value = value * Constants<PT>::EXP_ARR[exponent_idx] * Constants<PT>::FRAC_ARR[factor_idx];
-	if (is_impossible_to_encode<PT>(tmp_encoded_value)) { return Constants<PT>::ENCODING_UPPER_LIMIT; }
+	if (is_impossible_to_encode<PT>(tmp_encoded_value)) { return static_cast<ST>(Constants<PT>::ENCODING_UPPER_LIMIT); }
 
 	tmp_encoded_value = tmp_encoded_value + Constants<PT>::MAGIC_NUMBER - Constants<PT>::MAGIC_NUMBER;
 	return static_cast<ST>(tmp_encoded_value);
