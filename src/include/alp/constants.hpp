@@ -14,8 +14,6 @@ enum class Scheme : uint8_t {
 };
 
 inline constexpr uint8_t SAMPLING_EARLY_EXIT_THRESHOLD    = 2;
-inline constexpr double  ENCODING_UPPER_LIMIT             = 9223372036854774784;
-inline constexpr double  ENCODING_LOWER_LIMIT             = -9223372036854774784;
 inline constexpr uint8_t DICTIONARY_ELEMENT_SIZE_BYTES    = 2;
 inline constexpr uint8_t RD_EXCEPTION_POSITION_SIZE       = 16;
 inline constexpr uint8_t RD_EXCEPTION_POSITION_SIZE_BYTES = RD_EXCEPTION_POSITION_SIZE / 8;
@@ -29,6 +27,8 @@ struct Constants {};
 
 template <>
 struct Constants<float> {
+	static inline constexpr float ENCODING_UPPER_LIMIT = 3.4028235e+38F;  // Largest finite float
+	static inline constexpr float ENCODING_LOWER_LIMIT = -3.4028235e+38F; // Smallest finite float
 	/// 22 bits per value * 32 values in the sampled vector
 	static inline constexpr size_t  RD_SIZE_THRESHOLD_LIMIT = 22 * alp::config::SAMPLES_PER_VECTOR;
 	static inline constexpr float   MAGIC_NUMBER            = 12582912.0;
@@ -65,6 +65,9 @@ struct Constants<float> {
 
 template <>
 struct Constants<double> {
+	static inline constexpr double ENCODING_UPPER_LIMIT = 9223372036854774784;
+	static inline constexpr double ENCODING_LOWER_LIMIT = -9223372036854774784;
+
 	/// 48 bits per value * 32 values in the sampled vector
 	static inline constexpr size_t  RD_SIZE_THRESHOLD_LIMIT = 48 * alp::config::SAMPLES_PER_VECTOR;
 	static inline constexpr double  MAGIC_NUMBER {0x0018000000000000};

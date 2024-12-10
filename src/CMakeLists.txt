@@ -44,6 +44,7 @@ endif ()
 # Define the library
 add_library(ALP
         SHARED
+        encoder.cpp
         falp.cpp
         fastlanes_generated_unffor.cpp
         fastlanes_generated_ffor.cpp
