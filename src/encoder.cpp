@@ -173,8 +173,8 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 	uint64_t best_estimated_compression_size {0};
 	uint8_t  worse_threshold_count {0};
 
-	const int32_t sample_increments =
-	    std::max(1, static_cast<int32_t>(std::ceil(input_vector_size / config::SAMPLES_PER_VECTOR)));
+	const size_t sample_increments = std::max(
+	    static_cast<size_t>(1), static_cast<size_t>(std::ceil(input_vector_size / config::SAMPLES_PER_VECTOR)));
 
 	// We try each K combination in search for the one which minimize the compression size in the vector
 	for (size_t k {0}; k < top_k; k++) {
@@ -247,8 +247,8 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 		    (samples_size * (Constants<PT>::EXCEPTION_SIZE))}; // worst scenario
 
 		// We try all combinations in search for the one which minimize the compression size
-		for (int8_t exp_ref = Constants<PT>::MAX_EXPONENT; exp_ref >= 0; exp_ref--) {
-			for (int8_t factor_idx = exp_ref; factor_idx >= 0; factor_idx--) {
+		for (uint8_t exp_ref = Constants<PT>::MAX_EXPONENT; exp_ref >= 0; exp_ref--) {
+			for (uint8_t factor_idx = exp_ref; factor_idx >= 0; factor_idx--) {
 				uint16_t exceptions_count           = {0};
 				uint16_t non_exceptions_count       = {0};
 				uint32_t estimated_bits_per_value   = {0};

@@ -61,6 +61,7 @@ target_compile_options(ALP PRIVATE
         -Werror
         -Wimplicit-float-conversion
         -Wimplicit-int-conversion
+        -Wsign-conversion
         )
 
 if (ALP_ENABLE_VERBOSE_OUTPUT)
