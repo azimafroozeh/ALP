@@ -22,11 +22,6 @@
 
 #endif
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#pragma GCC diagnostic ignored "-Wimplicit-int-conversion"
-
 /*
  * ALP Encoding
  */
@@ -116,7 +111,5 @@ struct encoder {
 };
 
 } // namespace alp
-
-#pragma GCC diagnostic pop
 
 #endif
