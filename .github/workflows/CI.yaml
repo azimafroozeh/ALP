@@ -1,7 +1,13 @@
 name: ALP CI
 run-name: ${{ github.actor }} is running the ALP CI
 
-on: push
+on:
+  push: # Trigger on any push
+    branches:
+      - "*" # All branches
+  pull_request: # Trigger on any pull request
+    branches:
+      - "*" # All branches
 
 jobs:
   # Format Check Job
@@ -27,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Up CMake
+      - name: Set Up Build Directory
         run: mkdir build
 
       - name: Configure CMake
@@ -56,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Up CMake
+      - name: Set Up Build Directory
         run: mkdir build
 
       - name: Configure CMake with Benchmarking
@@ -74,7 +80,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Up CMake
+      - name: Set Up Build Directory
         run: mkdir build
 
       - name: Configure CMake with Publication
