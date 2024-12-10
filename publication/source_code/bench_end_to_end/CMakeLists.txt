@@ -110,18 +110,18 @@ IF (DATADIR)
     message(STATUS "setting datadir to user defined")
     message(STATUS "${DATADIR}")
 
-    ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
+    ADD_DEFINITIONS(-DDATADIR= "${DATADIR}")
 ELSE (DATADIR)
     message(STATUS "setting datadir to proj dir ")
     message(STATUS "${PROJECT_SOURCE_DIR}/data")
-    ADD_DEFINITIONS(-DDATADIR="${PROJECT_SOURCE_DIR}/data")
+    ADD_DEFINITIONS(-DDATADIR= "${PROJECT_SOURCE_DIR}/data")
 ENDIF (DATADIR)
 
 include(FetchContent)
 FetchContent_Declare(tbb
         GIT_REPOSITORY https://github.com/oneapi-src/oneTBB.git
         GIT_TAG master
-)
+        )
 FetchContent_MakeAvailable(tbb)
 set(TBB_LIBRARIES tbb)
 include_directories(${tbb_SOURCE_DIR}/include)
@@ -168,7 +168,9 @@ add_library(common
         src/common/runtime/Hashmap.cpp
         src/common/runtime/Concurrency.cpp
         src/common/runtime/Profile.cpp
-)
+        )
+
+target_link_libraries(common PUBLIC ALP)
 
 
 target_include_directories(common PUBLIC
@@ -182,12 +184,12 @@ set(HYPER_TRANSLATORS
         src/hyper/codegen/operators/Map.cpp
         src/hyper/codegen/operators/Print.cpp
         src/hyper/codegen/operators/Scan.cpp
-)
+        )
 
 add_library(hyper
         src/hyper/codegen/Translator.cpp
         src/hyper/codegen/TranslatorRegistry.cpp
-)
+        )
 target_include_directories(hyper PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -200,7 +202,7 @@ add_library(vectorwise
         src/vectorwise/Operators.cpp
         ${PRIMITIVES}
         src/vectorwise/QueryBuilder.cpp
-)
+        )
 target_include_directories(vectorwise PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -209,7 +211,7 @@ target_include_directories(vectorwise PUBLIC
 if (AVX512EXPERIMENTS)
     SET_TARGET_PROPERTIES(vectorwise PROPERTIES
             COMPILE_FLAGS "-march=skylake-avx512"
-    )
+            )
 endif ()
 target_link_libraries(vectorwise common)
 
@@ -233,7 +235,7 @@ file(GLOB TPCHQUERIES
 
 add_library(tpch
         ${TPCHQUERIES}
-)
+        )
 target_include_directories(tpch PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -273,7 +275,7 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_Declare(gflags
         GIT_REPOSITORY https://github.com/gflags/gflags.git
         GIT_TAG master
-)
+        )
 
 FetchContent_GetProperties(gflags)
 if (NOT gflags_POPULATED)
@@ -303,7 +305,7 @@ target_include_directories(run_all PUBLIC
         PRIVATE src)
 
 
-target_link_libraries(run_all PUBLIC gtest_main gflags btrblocks tpch hyper vectorwise common ${JEVENTSLIB} x86_64_avx512bw_intrinsic_1024_uf1_falp ALP libzstd_shared)
+target_link_libraries(run_all PUBLIC gtest_main gflags btrblocks tpch hyper vectorwise common ${JEVENTSLIB} x86_64_avx512bw_intrinsic_1024_uf1_falp libzstd_shared)
 target_compile_options(run_all PUBLIC -mavx512dq)
 
 
@@ -325,6 +327,6 @@ target_include_directories(run_query PUBLIC
         PRIVATE src)
 
 
-target_link_libraries(run_query PUBLIC gtest_main gflags btrblocks tpch hyper vectorwise common ${JEVENTSLIB} x86_64_avx512bw_intrinsic_1024_uf1_falp ALP libzstd_shared)
+target_link_libraries(run_query PUBLIC gtest_main gflags btrblocks tpch hyper vectorwise common ${JEVENTSLIB} x86_64_avx512bw_intrinsic_1024_uf1_falp libzstd_shared)
 
 target_compile_options(run_query PUBLIC -mavx512dq)
