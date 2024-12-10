@@ -38,12 +38,12 @@ struct state {
 	size_t   sampled_values_n {0};
 
 	// ALP
-	uint16_t                         k_combinations {5};
-	std::vector<std::pair<int, int>> best_k_combinations;
-	uint8_t                          exp {};
-	uint8_t                          fac {};
-	bw_t                             bit_width {};
-	ST                               for_base {};
+	uint8_t                                  k_combinations {5};
+	std::vector<std::pair<uint8_t, uint8_t>> best_k_combinations;
+	uint8_t                                  exp {};
+	uint8_t                                  fac {};
+	bw_t                                     bit_width {};
+	ST                                       for_base {};
 
 	// ALP RD
 	bw_t                                   right_bit_width {0};
@@ -84,12 +84,13 @@ struct encoder {
 	 * Find the best combination of factor-exponent for a vector from within the best k combinations
 	 * This is ALP second level sampling
 	 */
-	static void find_best_exponent_factor_from_combinations(const std::vector<std::pair<int, int>>& top_combinations,
-	                                                        const uint8_t                           top_k,
-	                                                        const PT*                               input_vector,
-	                                                        const uint16_t                          input_vector_size,
-	                                                        uint8_t&                                factor,
-	                                                        uint8_t&                                exponent);
+	static void
+	find_best_exponent_factor_from_combinations(const std::vector<std::pair<uint8_t, uint8_t>>& top_combinations,
+	                                            const uint8_t                                   top_k,
+	                                            const PT*                                       input_vector,
+	                                            const uint16_t                                  input_vector_size,
+	                                            uint8_t&                                        factor,
+	                                            uint8_t&                                        exponent);
 
 	static void encode_simdized(const PT*            input_vector,
 	                            PT*                  exceptions,

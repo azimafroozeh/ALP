@@ -6,9 +6,9 @@ template <typename UT>
 static uint8_t count_bits(UT x) {
 	if (x == 0) { return 0; }
 	if constexpr (std::is_same_v<UT, uint64_t>) {
-		return 64 - __builtin_clzll(x);
+		return static_cast<uint8_t>(64 - __builtin_clzll(x));
 	} else {
-		return 32 - __builtin_clz(x);
+		return static_cast<uint8_t>(32 - __builtin_clz(x));
 	}
 }
 
@@ -138,8 +138,8 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 		}
 	}
 
-	for (size_t j {0}; j < exceptions_idx; j++) {
-		size_t     i                                   = TMP_INDEX_ARR[j];
+	for (exp_p_t j {0}; j < exceptions_idx; j++) {
+		auto       i                                   = static_cast<exp_p_t>(TMP_INDEX_ARR[j]);
 		const auto actual_value                        = input_vector[i];
 		encoded_integers[i]                            = a_non_exception_value;
 		exceptions[current_exceptions_count]           = actual_value;
@@ -161,12 +161,13 @@ void encoder<PT>::init(
 }
 
 template <typename PT>
-void encoder<PT>::find_best_exponent_factor_from_combinations(const std::vector<std::pair<int, int>>& top_combinations,
-                                                              const uint8_t                           top_k,
-                                                              const PT*                               input_vector,
-                                                              const uint16_t                          input_vector_size,
-                                                              uint8_t&                                factor,
-                                                              uint8_t&                                exponent) {
+void encoder<PT>::find_best_exponent_factor_from_combinations(
+    const std::vector<std::pair<uint8_t, uint8_t>>& top_combinations,
+    const uint8_t                                   top_k,
+    const PT*                                       input_vector,
+    const uint16_t                                  input_vector_size,
+    uint8_t&                                        factor,
+    uint8_t&                                        exponent) {
 	uint8_t  found_exponent {0};
 	uint8_t  found_factor {0};
 	uint64_t best_estimated_compression_size {0};
@@ -177,13 +178,13 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(const std::vector<
 
 	// We try each K combination in search for the one which minimize the compression size in the vector
 	for (size_t k {0}; k < top_k; k++) {
-		const int exp_idx    = top_combinations[k].first;
-		const int factor_idx = top_combinations[k].second;
-		uint32_t  exception_count {0};
-		uint32_t  estimated_bits_per_value {0};
-		uint64_t  estimated_compression_size {0};
-		ST        max_encoded_value {std::numeric_limits<ST>::min()};
-		ST        min_encoded_value {std::numeric_limits<ST>::max()};
+		const auto exp_idx    = top_combinations[k].first;
+		const auto factor_idx = top_combinations[k].second;
+		uint32_t   exception_count {0};
+		uint32_t   estimated_bits_per_value {0};
+		uint64_t   estimated_compression_size {0};
+		ST         max_encoded_value {std::numeric_limits<ST>::min()};
+		ST         min_encoded_value {std::numeric_limits<ST>::max()};
 
 		for (size_t sample_idx = 0; sample_idx < input_vector_size; sample_idx += sample_increments) {
 			const PT actual_value  = input_vector[sample_idx];
@@ -314,7 +315,9 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 	}
 	// We sort combinations based on times they appeared
 	std::sort(best_k_combinations.begin(), best_k_combinations.end(), compare_best_combinations);
-	if (best_k_combinations.size() < stt.k_combinations) { stt.k_combinations = best_k_combinations.size(); }
+	if (best_k_combinations.size() < stt.k_combinations) {
+		stt.k_combinations = static_cast<uint8_t>(best_k_combinations.size());
+	}
 
 	// Save k' best exp, fac combination pairs
 	for (size_t i {0}; i < stt.k_combinations; i++) {
