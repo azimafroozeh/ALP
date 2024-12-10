@@ -77,8 +77,6 @@ add_compile_definitions(ALP_CMAKE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 if (ALP_BUILD_LIBRARY)
     message("---------------------------------------------------------------------------------------------------------")
     message("-- ALP: Build Library:")
-    include_directories(include)
-
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 endif ()
 
