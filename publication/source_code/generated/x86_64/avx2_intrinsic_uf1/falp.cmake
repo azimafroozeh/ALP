@@ -15,6 +15,7 @@ LIST(APPEND ALP_GENERATED_OBJECT_FILES
         $<TARGET_OBJECTS:x86_64_avx2_intrinsic_1024_uf1_falp>)
 get_target_property(TARGET_NAME x86_64_avx2_intrinsic_1024_uf1_falp NAME)
 get_target_property(TARGET_COMPILE_OPTIONS x86_64_avx2_intrinsic_1024_uf1_falp COMPILE_OPTIONS)
+target_link_libraries(x86_64_avx2_intrinsic_1024_uf1_falp PRIVATE ALP)
 #------------------------------------------------------------------------------------------------------
 add_executable(x86_64_avx2_intrinsic_1024_uf1_falp_test x86_64_avx2_intrinsic_1024_uf1_falp_test.cpp)
 target_link_libraries(x86_64_avx2_intrinsic_1024_uf1_falp_test PRIVATE x86_64_avx2_intrinsic_1024_uf1_falp)
