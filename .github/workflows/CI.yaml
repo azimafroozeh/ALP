@@ -76,7 +76,14 @@ jobs:
   # Publication Job
   build-publication:
     needs: build-and-test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      fail-fast: true
+      matrix:
+        platform: [ ubuntu-latest, macos-latest ]
+        build_type: [ Release ]
+        cxx: [ clang++ ]
+
     steps:
       - uses: actions/checkout@v4
 
