@@ -87,6 +87,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Boost
+        if: ${{ matrix.cxx == 'clang++' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libboost-all-dev
+
       - name: Set Up Build Directory
         run: mkdir build
 
