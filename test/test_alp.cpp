@@ -118,7 +118,7 @@ public:
 		size_t         tuples_count {alp::config::VECTOR_SIZE};
 		size_t         rowgroup_offset {0};
 
-		double      value_to_encode;
+		PT      value_to_encode;
 		std::string val_str;
 		// keep storing values from the text file so long as data exists:
 		size_t row_idx {0};
