@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check Code Format
-        run: echo "TODO: Add code formatting check (e.g., clang-format)"
+        run: "echo 'TODO: Add code formatting check (e.g., clang-format)'"
 
   # Build and Test Job
   build-and-test:
@@ -26,9 +26,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        platform: [ubuntu-latest, macos-latest]
-        build_type: [Debug, Release]
-        cxx: [clang++]
+        platform: [ ubuntu-latest, macos-latest ]
+        build_type: [ Debug, Release ]
+        cxx: [ clang++ ]
 
     steps:
       - uses: actions/checkout@v4
@@ -55,9 +55,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        platform: [ubuntu-latest, macos-latest]
-        build_type: [Release]
-        cxx: [clang++]
+        platform: [ ubuntu-latest, macos-latest ]
+        build_type: [ Release ]
+        cxx: [ clang++ ]
 
     steps:
       - uses: actions/checkout@v4
