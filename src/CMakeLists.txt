@@ -62,6 +62,7 @@ target_compile_options(ALP PRIVATE
         -Wimplicit-float-conversion
         -Wimplicit-int-conversion
         -Wsign-conversion
+        -Wshorten-64-to-32
         )
 
 if (ALP_ENABLE_VERBOSE_OUTPUT)

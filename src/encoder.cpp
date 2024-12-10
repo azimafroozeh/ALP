@@ -121,7 +121,7 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 		}
 	}
 #else
-	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+	for (UT i {0}; i < config::VECTOR_SIZE; i++) {
 		auto l                        = ENCODED_VALUE_ARR[i];
 		auto r                        = VALUE_ARR_WITHOUT_SPECIALS[i];
 		auto is_exception             = (l != r);
