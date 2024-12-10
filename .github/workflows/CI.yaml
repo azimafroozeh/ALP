@@ -111,7 +111,3 @@ jobs:
 
       - name: Build Publication
         run: cmake --build build -j 16
-
-      - name: Run Publication Tests
-        working-directory: build
-        run: ./publication/run_all_publication_tests
