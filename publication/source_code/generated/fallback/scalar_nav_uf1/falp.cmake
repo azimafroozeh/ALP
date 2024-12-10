@@ -16,6 +16,7 @@ LIST(APPEND ALP_GENERATED_OBJECT_FILES
         $<TARGET_OBJECTS:fallback_scalar_nav_1024_uf1_falp>)
 get_target_property(TARGET_NAME fallback_scalar_nav_1024_uf1_falp NAME)
 get_target_property(TARGET_COMPILE_OPTIONS fallback_scalar_nav_1024_uf1_falp COMPILE_OPTIONS)
+target_link_libraries(fallback_scalar_nav_1024_uf1_falp PRIVATE ALP)
 #------------------------------------------------------------------------------------------------------
 add_executable(fallback_scalar_nav_1024_uf1_falp_test fallback_scalar_nav_1024_uf1_falp_test.cpp)
 target_link_libraries(fallback_scalar_nav_1024_uf1_falp_test PRIVATE fallback_scalar_nav_1024_uf1_falp)

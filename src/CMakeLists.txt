@@ -51,7 +51,23 @@ add_library(ALP
         fastlanes_unffor.cpp
         )
 
+target_include_directories(ALP PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+
+# Compiler flags for the ALP target (C++)
+target_compile_options(ALP PRIVATE
+        -Wall
+        -Werror
+        -Wimplicit-float-conversion
+        )
+
+if (ALP_ENABLE_VERBOSE_OUTPUT)
+    cmake_print_properties(TARGETS ALP PROPERTIES COMPILE_DEFINITIONS PROPERTIES COMPILE_OPTIONS)
+endif ()
+
 # Add AVX-512DQ flag if supported and not on GitHub Actions
 if (AVX512DQ_FLAG)
     target_compile_options(ALP PUBLIC ${AVX512DQ_FLAG})
 endif ()
+
+

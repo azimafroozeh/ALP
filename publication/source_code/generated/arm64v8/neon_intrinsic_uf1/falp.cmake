@@ -15,6 +15,7 @@ LIST(APPEND ALP_GENERATED_OBJECT_FILES
         $<TARGET_OBJECTS:arm64v8_neon_intrinsic_1024_uf1_falp>)
 get_target_property(TARGET_NAME arm64v8_neon_intrinsic_1024_uf1_falp NAME)
 get_target_property(TARGET_COMPILE_OPTIONS arm64v8_neon_intrinsic_1024_uf1_falp COMPILE_OPTIONS)
+target_link_libraries(arm64v8_neon_intrinsic_1024_uf1_falp PRIVATE ALP)
 #------------------------------------------------------------------------------------------------------
 add_executable(arm64v8_neon_intrinsic_1024_uf1_falp_test arm64v8_neon_intrinsic_1024_uf1_falp_test.cpp)
 target_link_libraries(arm64v8_neon_intrinsic_1024_uf1_falp_test PRIVATE ALP gtest_main arm64v8_neon_intrinsic_1024_uf1_falp)

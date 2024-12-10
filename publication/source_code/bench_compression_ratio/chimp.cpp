@@ -41,7 +41,8 @@ public:
 	}
 
 	template <typename T, int N_DATASETS>
-	void bench_compression_ratio(const std::array<alp_bench::ALPColumnDescriptor, N_DATASETS>& datasets, const std::string& path) {
+	void bench_compression_ratio(const std::array<alp_bench::ALPColumnDescriptor, N_DATASETS>& datasets,
+	                             const std::string&                                            path) {
 		if (const auto v = std::getenv("ALP_DATASET_DIR_PATH"); v != nullptr) {
 			alp_bench::get_paths().alp_dataset_binary_dir_path = *v;
 		}
@@ -68,7 +69,7 @@ public:
 
 			size_t tuples_count;
 			auto*  data_column = mapper::mmap_file<T>(tuples_count, dataset.binary_file_path);
-			double value_to_encode {0.0};
+			T      value_to_encode {0.0};
 			size_t vector_idx {0};
 			size_t rowgroup_offset {0};
 			size_t vectors_count = {0};
