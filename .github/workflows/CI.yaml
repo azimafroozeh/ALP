@@ -2,12 +2,12 @@ name: ALP CI
 run-name: ${{ github.actor }} is running the ALP CI
 
 on:
-  push: # Trigger on any push
+  push:
     branches:
-      - "*" # All branches
-  pull_request: # Trigger on any pull request
+      - "*"  # All branches
+  pull_request:
     branches:
-      - "*" # All branches
+      - "*"  # All branches
 
 jobs:
   # Format Check Job
@@ -92,6 +92,8 @@ jobs:
 
       - name: Configure CMake with Publication
         run: cmake -S . -B build -DALP_BUILD_PUBLICATION=ON -DCMAKE_BUILD_TYPE=Release
+        env:
+          CXX: ${{ matrix.cxx }}
 
       - name: Build Publication
         run: cmake --build build -j 16
