@@ -53,11 +53,7 @@ add_library(ALP
         )
 
 # Add include directories for the ALP target
-target_include_directories(ALP
-        PUBLIC  # PUBLIC makes them available to targets linking ALP
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>  # When installed, maps to the 'include' directory
-        )
+target_include_directories(ALP PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Compiler flags for the ALP target (C++)
 target_compile_options(ALP PRIVATE
