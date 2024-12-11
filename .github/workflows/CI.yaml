@@ -105,7 +105,7 @@ jobs:
         run: mkdir build
 
       - name: Configure CMake with Publication
-        run: cmake -S . -B build -DALP_BUILD_PUBLICATION=ON -DCMAKE_BUILD_TYPE=Release -v
+        run: cmake -S . -B build -DALP_BUILD_PUBLICATION=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=toolchain/i4i_4xlarge.cmake  -v
         env:
           CXX: ${{ matrix.cxx }}
 
