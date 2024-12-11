@@ -116,7 +116,7 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 			__m512i  index        = _mm512_loadu_si512(FLOAT_INDEX_ARR + i);
 			uint16_t is_exception = _mm512_cmpneq_ps_mask(l, r);
 			_mm512_mask_compressstoreu_ps(TMP_INDEX_ARR + exceptions_idx, is_exception, index);
-			auto n_exceptions = LOOKUP_TABLE[is_exception & 0b0000000011111111] + LOOKUP_TABLE[is_exception >> 8];
+			uint16_t n_exceptions = LOOKUP_TABLE[is_exception & 0b0000000011111111] + LOOKUP_TABLE[is_exception >> 8];
 			exceptions_idx += n_exceptions; // Update index
 		}
 	}

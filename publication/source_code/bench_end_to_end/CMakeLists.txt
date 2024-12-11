@@ -110,11 +110,11 @@ IF (DATADIR)
     message(STATUS "setting datadir to user defined")
     message(STATUS "${DATADIR}")
 
-    ADD_DEFINITIONS(-DDATADIR= "${DATADIR}")
+    ADD_DEFINITIONS(-DDATADIR="${DATADIR}")
 ELSE (DATADIR)
     message(STATUS "setting datadir to proj dir ")
     message(STATUS "${PROJECT_SOURCE_DIR}/data")
-    ADD_DEFINITIONS(-DDATADIR= "${PROJECT_SOURCE_DIR}/data")
+    ADD_DEFINITIONS(-DDATADIR="${PROJECT_SOURCE_DIR}/data")
 ENDIF (DATADIR)
 
 include(FetchContent)
