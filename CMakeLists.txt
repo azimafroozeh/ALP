@@ -10,7 +10,6 @@ option(ALP_BUILD_LIBRARY "Build ALP Library" ON)
 option(ALP_BUILD_TESTING "Build Testing" OFF)
 option(ALP_BUILD_BENCHMARKING "Build Benchmarking" OFF)
 option(ALP_ENABLE_CLANG_TIDY "Enable clang_tidy on all targets" ON)
-option(ALP_BUILD_PUBLICATION "Build Availability and Reproducibility" OFF)
 option(ALP_ENABLE_VERBOSE_OUTPUT "Enable verbose output" OFF)
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -119,13 +118,4 @@ if (ALP_BUILD_BENCHMARKING)
 
     include_directories(${CMAKE_SOURCE_DIR}/benchmarks/include)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/benchmarks)
-endif ()
-
-# Paper : --------------------------------------------------------------------------------------------------------------
-if (ALP_BUILD_PUBLICATION)
-    message("---------------------------------------------------------------------------------------------------------")
-    message("-- ALP: Build Publication:")
-
-    include_directories(${CMAKE_SOURCE_DIR}/publication/source_code/include)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/publication)
 endif ()
