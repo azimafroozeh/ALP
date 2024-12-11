@@ -35,7 +35,7 @@ OPTION(INTERPRET_SEPARATE OFF)
 OPTION(HASH_SIZE_32 OFF)
 
 # Compiler flags for the different targets
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512dq -mtune=native -std=c++14 -fPIC -Wno-error")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512vl -mavx512dq -mtune=native -std=c++14 -fPIC -Wno-error")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wno-error -fno-omit-frame-pointer -mavx512dq -fdiagnostics-color ")
 
 if (LINUX)
