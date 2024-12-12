@@ -46,7 +46,6 @@ clang-analyzer-core.BitwiseShift,
 '
 
 WarningsAsErrors: '*'
-AnalyzeTemporaryDtors: false
 FormatStyle: none
 
 ExtraArgs:
