@@ -41,7 +41,6 @@ else ()
     endif ()
 endif ()
 
-# Define the library
 add_library(ALP
         SHARED
         encoder.cpp
@@ -58,7 +57,6 @@ target_include_directories(ALP PUBLIC
         $<INSTALL_INTERFACE:include>
 )
 
-# Compiler flags for the ALP target (C++)
 target_compile_options(ALP PRIVATE
         -Wall
         -Werror
