@@ -55,7 +55,6 @@ add_library(ALP
 # Add include directories for the ALP target
 target_include_directories(ALP PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # For builds
-        $<INSTALL_INTERFACE:include>                           # For installed files
 )
 
 # Compiler flags for the ALP target (C++)
