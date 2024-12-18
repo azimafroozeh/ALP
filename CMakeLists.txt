@@ -77,6 +77,21 @@ if (ALP_BUILD_LIBRARY)
     message("---------------------------------------------------------------------------------------------------------")
     message("-- ALP: Build Library:")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+    install(
+            EXPORT ALPTargets
+            FILE ALPTargets.cmake
+            DESTINATION lib/ALP
+            NAMESPACE ALP::
+    )
+
+    export(
+            EXPORT ALPTargets
+            FILE "${CMAKE_BINARY_DIR}/ALPTargets.cmake"
+            NAMESPACE ALP::
+    )
+
+
 endif ()
 
 # Data: ----------------------------------------------------------------------------------------------------------------

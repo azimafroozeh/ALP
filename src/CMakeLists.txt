@@ -17,13 +17,13 @@ if (COMPILER_SUPPORTS_AVX512DQ)
             __m512d x = _mm512_set1_pd(1.0); // AVX-512DQ specific intrinsic for double-precision
             return 0;
         }"
-            )
+    )
 
     try_compile(HAS_AVX512DQ_SUPPORT
             "${CMAKE_BINARY_DIR}"
             "${CMAKE_BINARY_DIR}/check_avx512dq.cpp"
             COMPILE_DEFINITIONS -mavx512dq
-            )
+    )
 
     if (HAS_AVX512DQ_SUPPORT AND NOT IS_GITHUB_ACTIONS)
         message(STATUS "Hardware supports AVX-512DQ. Adding AVX-512DQ flags.")
@@ -50,10 +50,13 @@ add_library(ALP
         fastlanes_generated_ffor.cpp
         fastlanes_ffor.cpp
         fastlanes_unffor.cpp
-        )
+)
 
 # Add include directories for the ALP target
-target_include_directories(ALP PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(ALP PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # For builds
+        $<INSTALL_INTERFACE:include>                           # For installed files
+)
 
 # Compiler flags for the ALP target (C++)
 target_compile_options(ALP PRIVATE
@@ -64,7 +67,7 @@ target_compile_options(ALP PRIVATE
         -Wsign-conversion
         -Wfloat-conversion
         -Wshorten-64-to-32
-        )
+)
 
 if (ALP_ENABLE_VERBOSE_OUTPUT)
     cmake_print_properties(TARGETS ALP PROPERTIES COMPILE_DEFINITIONS PROPERTIES COMPILE_OPTIONS)
@@ -74,5 +77,14 @@ endif ()
 if (AVX512DQ_FLAG)
     target_compile_options(ALP PUBLIC ${AVX512DQ_FLAG})
 endif ()
+
+install(
+        TARGETS ALP
+        EXPORT ALPTargets
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+)
 
 
