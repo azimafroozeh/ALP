@@ -42,7 +42,7 @@ else ()
 endif ()
 
 add_library(ALP
-        SHARED
+        STATIC
         encoder.cpp
         falp.cpp
         fastlanes_generated_unffor.cpp
