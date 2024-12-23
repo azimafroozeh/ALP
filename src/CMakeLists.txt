@@ -45,10 +45,11 @@ add_library(ALP
         STATIC
         encoder.cpp
         falp.cpp
+        fastlanes_ffor.cpp
         fastlanes_generated_unffor.cpp
         fastlanes_generated_ffor.cpp
-        fastlanes_ffor.cpp
         fastlanes_unffor.cpp
+        ffor_util.cpp
 )
 
 # Add include directories for the ALP target

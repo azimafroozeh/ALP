@@ -1,16 +1,7 @@
 #include "alp/encoder.hpp"
+#include "fls/ffor_util.hpp"
 
 namespace alp {
-
-template <typename UT>
-static uint8_t count_bits(UT x) {
-	if (x == 0) { return 0; }
-	if constexpr (std::is_same_v<UT, uint64_t>) {
-		return static_cast<uint8_t>(64 - __builtin_clzll(x));
-	} else {
-		return static_cast<uint8_t>(32 - __builtin_clz(x));
-	}
-}
 
 template <typename PT>
 bool is_impossible_to_encode(const PT n) {
@@ -29,13 +20,6 @@ ST encode_value(const PT value, const factor_idx_t factor_idx, const exponent_id
 
 	tmp_encoded_value = tmp_encoded_value + Constants<PT>::MAGIC_NUMBER - Constants<PT>::MAGIC_NUMBER;
 	return static_cast<ST>(tmp_encoded_value);
-}
-
-template <typename ST, typename UT>
-static uint8_t count_bits(ST max, ST min) {
-	const auto delta = (static_cast<UT>(max) - static_cast<UT>(min));
-	auto       res   = count_bits<UT>(delta);
-	return res;
 }
 
 template <typename PT>
@@ -199,7 +183,7 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 		}
 
 		// Evaluate factor/exponent performance (we optimize for FOR)
-		estimated_bits_per_value = count_bits<ST, UT>(max_encoded_value, min_encoded_value);
+		estimated_bits_per_value = fastlanes::count_bits<ST>(max_encoded_value, min_encoded_value);
 		estimated_compression_size += config::SAMPLES_PER_VECTOR * estimated_bits_per_value;
 		estimated_compression_size += exception_count * (Constants<PT>::EXCEPTION_SIZE + EXCEPTION_POSITION_SIZE);
 
@@ -275,7 +259,7 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 				if (non_exceptions_count < 2) { continue; }
 
 				// Evaluate factor/exponent compression size (we optimize for FOR)
-				estimated_bits_per_value = count_bits<ST, UT>(max_encoded_value, min_encoded_value);
+				estimated_bits_per_value = fastlanes::count_bits<ST>(max_encoded_value, min_encoded_value);
 				estimated_compression_size += samples_size * estimated_bits_per_value;
 				estimated_compression_size +=
 				    exceptions_count * (Constants<PT>::EXCEPTION_SIZE + EXCEPTION_POSITION_SIZE);
@@ -344,7 +328,7 @@ void encoder<PT>::analyze_ffor(const ST* input_vector, bw_t& bit_width, ST* base
 		if (input_vector[i] > max) { max = input_vector[i]; }
 	}
 
-	bit_width   = count_bits<ST, UT>(max, min);
+	bit_width   = fastlanes::count_bits<ST>(max, min);
 	base_for[0] = min;
 }
 
