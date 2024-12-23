@@ -1,4 +1,4 @@
-#include "fastlanes/ffor.hpp"
+#include "fls/ffor.hpp"
 
 namespace fastlanes::generated::ffor::fallback::scalar {
 

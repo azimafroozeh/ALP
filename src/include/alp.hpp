@@ -9,7 +9,7 @@
 #include "alp/rd.hpp"
 #include "alp/sampler.hpp"
 #include "alp/storer.hpp"
-#include "fastlanes/ffor.hpp"
-#include "fastlanes/unffor.hpp"
+#include "fls/ffor.hpp"
+#include "fls/unffor.hpp"
 
 #endif // ALP_HPP
