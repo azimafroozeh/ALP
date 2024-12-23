@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_CXX_STANDARD 20)
-project(ALP)
+project(ALP VERSION 1.0.0)
 
 add_compile_options(-fPIC)
 
@@ -75,7 +75,7 @@ add_compile_definitions(ALP_CMAKE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 # Src: -----------------------------------------------------------------------------------------------------------------
 if (ALP_BUILD_LIBRARY)
     message("---------------------------------------------------------------------------------------------------------")
-    message("-- ALP: Build Library:")
+    message("-- ALP: Build Library: Version ${PROJECT_VERSION}")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
     install(
