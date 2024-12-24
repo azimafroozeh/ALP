@@ -7,6 +7,7 @@ namespace fastlanes {
 
 template <typename PT>
 uint8_t count_bits(PT max, PT min);
+
 } // namespace fastlanes
 
 #endif // FLS_FFOR_UTIL_HPP

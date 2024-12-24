@@ -1,5 +1,4 @@
 #include "fls/ffor_util.hpp"
-#include <assert.h>
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
@@ -7,7 +6,7 @@
 namespace fastlanes {
 
 template <typename UT>
-static uint8_t count_bits(UT x) noexcept {
+static uint8_t _count_bits(UT x) noexcept {
 	static_assert(std::is_same_v<UT, uint64_t>        //
 	                  || std::is_same_v<UT, uint32_t> //
 	                  || std::is_same_v<UT, uint16_t> //
@@ -39,7 +38,7 @@ uint8_t count_bits(PT max, PT min) {
 
 	const UT delta = static_cast<UT>(max) - static_cast<UT>(min);
 
-	const auto res = count_bits<UT>(delta);
+	const auto res = _count_bits<UT>(delta);
 	return res;
 }
 
