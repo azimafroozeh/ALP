@@ -1,13 +1,13 @@
+#ifndef BENCHMARK_HPP
+#define BENCHMARK_HPP
+
 #include "alp.hpp"
 #include "data.hpp"
 #include "gtest/gtest.h"
 #include <unordered_map>
 
-#ifndef ALP_BENCH_ALP_HPP
-#define ALP_BENCH_ALP_HPP
-
-using namespace alp::config;
-using namespace alp_bench;
+using namespace alp::config; // NOLINT
+using namespace alp_bench; // NOLINT
 
 namespace alp_bench {
 // ALP overhead per vector : bit_width + factor-idx + exponent-idx + ffor base;
@@ -317,4 +317,4 @@ public:
 };
 } // namespace alp_bench
 
-#endif // ALP_BENCH_ALP_HPP
+#endif // BENCHMARK_HPP

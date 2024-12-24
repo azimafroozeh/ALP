@@ -1,5 +1,5 @@
-#ifndef FLOAT_COLUMNS_HPP
-#define FLOAT_COLUMNS_HPP
+#ifndef FLOAT_FLOAT_DATASET_HPP
+#define FLOAT_FLOAT_DATASET_HPP
 
 #include "float/edge_case.hpp"
 #include "float/hurricane_isabel.hpp"

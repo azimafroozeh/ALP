@@ -1,5 +1,5 @@
-#ifndef ALP_SP_HPP
-#define ALP_SP_HPP
+#ifndef FLOAT_SP_HPP
+#define FLOAT_SP_HPP
 
 #include "column.hpp"
 
@@ -24,6 +24,5 @@ inline auto get_sp_datasets() {
 	return SP_DATASETS;
 }
 
-
 } // namespace alp_bench
-#endif // ALP_SP_HPP
+#endif // FLOAT_SP_HPP

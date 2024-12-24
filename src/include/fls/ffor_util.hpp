@@ -1,5 +1,5 @@
-#ifndef FFOR_UTIL_HPP
-#define FFOR_UTIL_HPP
+#ifndef FLS_FFOR_UTIL_HPP
+#define FLS_FFOR_UTIL_HPP
 
 #include <cstdint>
 
@@ -9,4 +9,4 @@ template <typename PT>
 uint8_t count_bits(PT max, PT min);
 } // namespace fastlanes
 
-#endif // FFOR_UTIL_HPP
+#endif // FLS_FFOR_UTIL_HPP

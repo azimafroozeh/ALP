@@ -1,5 +1,5 @@
-#ifndef ISSUE_DATASET_HPP
-#define ISSUE_DATASET_HPP
+#ifndef DOUBLE_ISSUE_DATASET_HPP
+#define DOUBLE_ISSUE_DATASET_HPP
 
 #include "column.hpp"
 

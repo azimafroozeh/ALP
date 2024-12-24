@@ -57,15 +57,16 @@ if (ALP_BUILD_PUBLICATION)
     set(ALP_ENABLE_CLANG_TIDY OFF)
 endif ()
 
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND ALP_ENABLE_CLANG_TIDY)
+if (ALP_ENABLE_CLANG_TIDY)
     find_program(CLANG_TIDY_EXE NAMES clang-tidy)
     if (NOT CLANG_TIDY_EXE)
-        message(FATAL_ERROR "-- ALP: clang-tidy not found.")
+        message(FATAL_ERROR "-- FLS: clang-tidy not found.")
     else ()
-        set(ALP_CLANG_TIDY_FLAGS
-                "-header-filter=${CMAKE_CURRENT_SOURCE_DIR}/include,${CMAKE_CURRENT_SOURCE_DIR}/data/include;-warnings-as-errors=*"
-                CACHE STRING "Flags for clang-tidy")
-        set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE};${ALP_CLANG_TIDY_FLAGS})
+        set(CMAKE_CXX_CLANG_TIDY
+                ${CLANG_TIDY_EXE};
+                -header-filter=include;
+                -warnings-as-errors=*;)
+
     endif ()
 endif ()
 

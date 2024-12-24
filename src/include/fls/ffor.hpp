@@ -1,5 +1,5 @@
-#ifndef FASTLANES_FFOR_HPP
-#define FASTLANES_FFOR_HPP
+#ifndef FLS_FFOR_HPP
+#define FLS_FFOR_HPP
 
 #include <cstdint>
 

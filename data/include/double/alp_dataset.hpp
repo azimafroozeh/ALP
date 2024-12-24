@@ -1,5 +1,5 @@
-#ifndef ALP_ALP_DATASET_HPP
-#define ALP_ALP_DATASET_HPP
+#ifndef DOUBLE_ALP_DATASET_HPP
+#define DOUBLE_ALP_DATASET_HPP
 
 #include "column.hpp"
 
@@ -295,4 +295,4 @@ inline std::array<ALPColumnDescriptor, 1> get_double_test_dataset() {
 }
 
 } // namespace alp_bench
-#endif // ALP_ALP_DATASET_HPP
+#endif // DOUBLE_ALP_DATASET_HPP

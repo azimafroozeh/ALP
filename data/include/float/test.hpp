@@ -1,5 +1,5 @@
-#ifndef ALP_TEST_HPP
-#define ALP_TEST_HPP
+#ifndef FLOAT_TEST_HPP
+#define FLOAT_TEST_HPP
 
 #include "column.hpp"
 
@@ -17,4 +17,4 @@ inline auto get_float_test_dataset() {
 }
 
 } // namespace alp_bench
-#endif // ALP_TEST_HPP
+#endif // FLOAT_TEST_HPP

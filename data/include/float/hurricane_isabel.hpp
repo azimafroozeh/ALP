@@ -1,5 +1,5 @@
-#ifndef ALP_HURRICANE_ISABEL_HPP
-#define ALP_HURRICANE_ISABEL_HPP
+#ifndef FLOAT_HURRICANE_ISABEL_HPP
+#define FLOAT_HURRICANE_ISABEL_HPP
 
 #include "column.hpp"
 
@@ -35,4 +35,4 @@ inline std::array<ALPColumnDescriptor, N_HURRICANE_ISABEL_COLUMNS> get_hurricane
 
 } // namespace alp_bench
 
-#endif // ALP_HURRICANE_ISABEL_HPP
+#endif // FLOAT_HURRICANE_ISABEL_HPP
