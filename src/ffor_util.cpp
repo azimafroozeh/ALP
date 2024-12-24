@@ -1,4 +1,5 @@
 #include "fls/ffor_util.hpp"
+#include <assert.h>
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
@@ -36,8 +37,9 @@ template <integral PT>
 uint8_t count_bits(PT max, PT min) {
 	using UT = std::conditional_t<std::is_signed_v<PT>, std::make_unsigned_t<PT>, PT>;
 
-	const auto delta = static_cast<UT>(max) - static_cast<UT>(min);
-	auto       res   = count_bits<UT>(delta);
+	const UT delta = static_cast<UT>(max) - static_cast<UT>(min);
+
+	const auto res = count_bits<UT>(delta);
 	return res;
 }
 
