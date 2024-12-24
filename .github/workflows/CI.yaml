@@ -16,8 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Clang-Tidy
+        if: runner.os == 'macOS'
+        run: |
+          brew install llvm
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
+
       - name: Check Code Format
-        run: "echo 'TODO: Add code formatting check (e.g., clang-format)'"
+        run: |
+          clang-tidy --version
+          echo 'TODO: Add code formatting check (e.g., clang-format)'
 
   # Build and Test Job
   build-and-test:
@@ -32,6 +41,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Clang-Tidy
+        if: matrix.platform == 'macos-latest'
+        run: |
+          brew install llvm
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
 
       - name: Set Up Build Directory
         run: mkdir build
@@ -61,6 +77,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Clang-Tidy
+        if: matrix.platform == 'macos-latest'
+        run: |
+          brew install llvm
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
 
       - name: Set Up Build Directory
         run: mkdir build
