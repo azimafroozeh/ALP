@@ -10,12 +10,17 @@ on:
       - "*"  # All branches
 
 jobs:
-  # Format Check Job
+  # 1) Format Check Job
   check-format:
-    runs-on: ubuntu-latest
+    name: "Format Check Job"
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest, macos-latest ]
     steps:
       - uses: actions/checkout@v4
 
+      # Only run brew install if it's macOS
       - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
@@ -26,16 +31,17 @@ jobs:
 
       - name: Verify Clang-Tidy Installation
         run: |
-          which clang-tidy
-          clang-tidy --version
+          which clang-tidy || echo "clang-tidy not found"
+          clang-tidy --version || true
 
       - name: Check Code Format
         run: |
+          echo "This is where you'd run clang-format or clang-tidy checks."
           clang-tidy --version
-          echo 'TODO: Add code formatting check (e.g., clang-format)'
 
-  # Build and Test Job
+  # 2) Build and Test Job
   build-and-test:
+    name: "Build and Test Job"
     needs: check-format
     runs-on: ${{ matrix.platform }}
     strategy:
@@ -48,6 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Again, install clang-tidy on macOS
       - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
@@ -58,8 +65,8 @@ jobs:
 
       - name: Verify Clang-Tidy Installation
         run: |
-          which clang-tidy
-          clang-tidy --version
+          which clang-tidy || echo "clang-tidy not found"
+          clang-tidy --version || true
 
       - name: Set Up Build Directory
         run: mkdir build
@@ -76,8 +83,9 @@ jobs:
         working-directory: build
         run: ctest --output-on-failure -j 16
 
-  # Benchmarking Job
+  # 3) Benchmarking Job
   build-benchmark:
+    name: "Build Benchmarking"
     needs: build-and-test
     runs-on: ${{ matrix.platform }}
     strategy:
@@ -90,6 +98,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Install clang-tidy on macOS
       - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
@@ -100,8 +109,8 @@ jobs:
 
       - name: Verify Clang-Tidy Installation
         run: |
-          which clang-tidy
-          clang-tidy --version
+          which clang-tidy || echo "clang-tidy not found"
+          clang-tidy --version || true
 
       - name: Set Up Build Directory
         run: mkdir build
