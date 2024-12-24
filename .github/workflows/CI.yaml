@@ -20,7 +20,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+          echo "/usr/local/opt/llvm/bin" >> $GITHUB_PATH
 
       - name: Verify Clang-Tidy Installation
         run: |
@@ -50,7 +50,7 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+          echo "/usr/local/opt/llvm/bin" >> $GITHUB_PATH
 
       - name: Verify Clang-Tidy Installation
         run: |
@@ -90,7 +90,7 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+          echo "/usr/local/opt/llvm/bin" >> $GITHUB_PATH
 
       - name: Verify Clang-Tidy Installation
         run: |
