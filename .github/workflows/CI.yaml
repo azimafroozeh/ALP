@@ -16,11 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Clang-Tidy (macOS)
+      - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
-          echo "/opt/homebrew/opt/llvm/bin" >> $GITHUB_PATH
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+          brew update
+          brew install llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
 
       - name: Verify Clang-Tidy Installation
         run: |
@@ -46,11 +48,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Clang-Tidy (macOS)
+      - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
-          echo "/opt/homebrew/opt/llvm/bin" >> $GITHUB_PATH
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+          brew update
+          brew install llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
 
       - name: Verify Clang-Tidy Installation
         run: |
@@ -86,11 +90,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Clang-Tidy (macOS)
+      - name: Install clang-tidy (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
-          echo "/opt/homebrew/opt/llvm/bin" >> $GITHUB_PATH
-          export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+          brew update
+          brew install llvm
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
 
       - name: Verify Clang-Tidy Installation
         run: |
