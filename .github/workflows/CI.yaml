@@ -20,8 +20,12 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
-          source ~/.zshrc
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+
+      - name: Verify Clang-Tidy Installation
+        run: |
+          which clang-tidy
+          clang-tidy --version
 
       - name: Check Code Format
         run: |
@@ -46,14 +50,18 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
-          source ~/.zshrc
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+
+      - name: Verify Clang-Tidy Installation
+        run: |
+          which clang-tidy
+          clang-tidy --version
 
       - name: Set Up Build Directory
         run: mkdir build
 
       - name: Configure CMake
-        run: cmake -S . -B build -DALP_BUILD_TESTING=ON -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        run: cmake -S . -B build -DALP_BUILD_TESTING=ON -DALP_ENABLE_CLANG_TIDY=ON -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         env:
           CXX: ${{ matrix.cxx }}
 
@@ -82,8 +90,12 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install llvm
-          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> ~/.zshrc
-          source ~/.zshrc
+          echo 'export PATH="/usr/local/opt/llvm/bin:$PATH"' >> $GITHUB_ENV
+
+      - name: Verify Clang-Tidy Installation
+        run: |
+          which clang-tidy
+          clang-tidy --version
 
       - name: Set Up Build Directory
         run: mkdir build
