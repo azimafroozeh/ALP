@@ -43,9 +43,9 @@ uint8_t count_bits(PT max, PT min) {
 	return res;
 }
 
-template uint8_t count_bits(int64_t max, int64_t min);
-template uint8_t count_bits(int32_t max, int32_t min);
-template uint8_t count_bits(int16_t max, int16_t min);
-template uint8_t count_bits(int8_t max, int8_t min);
+template uint8_t count_bits<int64_t>(int64_t max, int64_t min);
+template uint8_t count_bits<int32_t>(int32_t max, int32_t min);
+template uint8_t count_bits<int16_t>(int16_t max, int16_t min);
+template uint8_t count_bits<int8_t>(int8_t max, int8_t min);
 
 } // namespace fastlanes
