@@ -177,10 +177,9 @@ struct rd_encoder {
 		}
 	}
 
-	static inline void
-	init(const PT* data_column, size_t column_offset, size_t tuples_count, PT* sample_arr, state<PT>& stt) {
+	static void init(const PT* rowgroup_data_p, const size_t rowgroup_size, PT* sample_arr, state<PT>& stt) {
 		stt.scheme           = Scheme::ALP_RD;
-		stt.sampled_values_n = sampler::first_level_sample<PT>(data_column, column_offset, tuples_count, sample_arr);
+		stt.sampled_values_n = sampler::first_level_sample<PT>(rowgroup_data_p, rowgroup_size, sample_arr);
 		find_best_dictionary(sample_arr, stt);
 	}
 };

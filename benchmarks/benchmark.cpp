@@ -76,11 +76,11 @@ BenchSpeedResult ALPBench::typed_bench_speed_column(const std::vector<PT>& data)
 
 	// init
 	alp::state<PT> stt;
-	alp::encoder<PT>::init(data.data(), 0, 1024, sample_arr, stt);
+	alp::encoder<PT>::init(data.data(), 1024, sample_arr, stt);
 
 	switch (stt.scheme) {
 	case alp::Scheme::ALP_RD: {
-		alp::rd_encoder<PT>::init(data_arr, 0, 1024, sample_arr, stt);
+		alp::rd_encoder<PT>::init(data_arr, 1024, sample_arr, stt);
 
 		uint64_t cycles = benchmark::cycleclock::Now();
 		for (uint64_t i = 0; i < iterations; ++i) {
@@ -214,11 +214,11 @@ void ALPBench::typed_bench_column(const ColumnDescriptor& column, std::ofstream&
 		}
 
 		auto n_values_per_current_rg = n_vec_per_current_rg * VECTOR_SIZE;
-		alp::encoder<PT>::init(cur_rg_p, rg_idx, n_values_per_current_rg, sample_arr, stt);
+		alp::encoder<PT>::init(cur_rg_p, n_values_per_current_rg, sample_arr, stt);
 
 		switch (stt.scheme) {
 		case alp::Scheme::ALP_RD: {
-			alp::rd_encoder<PT>::init(cur_rg_p, 0, n_values_per_current_rg, sample_arr, stt);
+			alp::rd_encoder<PT>::init(cur_rg_p, n_values_per_current_rg, sample_arr, stt);
 			for (size_t vector_idx {0}; vector_idx < n_vec_per_current_rg; vector_idx++) {
 				const PT* cur_vec_p = get_data(rg_idx, data_column, vector_idx);
 

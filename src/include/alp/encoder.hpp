@@ -107,7 +107,7 @@ struct encoder {
 	                   ST*        encoded_integers,
 	                   state<PT>& stt);
 
-	static void init(const PT* data_column, size_t column_offset, size_t tuples_count, PT* sample_arr, state<PT>& stt);
+	static void init(const PT* rowgroup_data_p, size_t rowgroup_size, PT* sample_arr, state<PT>& stt);
 };
 
 } // namespace alp

@@ -135,10 +135,9 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 }
 
 template <typename PT>
-void encoder<PT>::init(
-    const PT* data_column, const size_t column_offset, const size_t tuples_count, PT* sample_arr, state<PT>& stt) {
+void encoder<PT>::init(const PT* rowgroup_data_p, const size_t rowgroup_size, PT* sample_arr, state<PT>& stt) {
 	stt.scheme           = Scheme::ALP;
-	stt.sampled_values_n = sampler::first_level_sample<PT>(data_column, column_offset, tuples_count, sample_arr);
+	stt.sampled_values_n = sampler::first_level_sample<PT>(rowgroup_data_p, rowgroup_size, sample_arr);
 	stt.k_combinations   = config::MAX_K_COMBINATIONS;
 	stt.best_k_combinations.clear();
 	find_top_k_combinations(sample_arr, stt);
