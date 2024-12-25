@@ -116,7 +116,6 @@ public:
 
 		alp::state<PT> stt;
 		size_t         tuples_count {alp::config::VECTOR_SIZE};
-		size_t         rowgroup_offset {0};
 
 		PT          value_to_encode;
 		std::string val_str;
