@@ -1,10 +1,9 @@
 #include "benchmark.hpp"
 #include "bench_alp.hpp"
-
-namespace alp_bench {
-
 #include <cmath>
 #include <gtest/gtest.h> // Assuming Google Test is being used
+
+namespace alp_bench {
 
 template <typename T>
 void ALP_ASSERT(T original_val, T decoded_val, size_t idx) {
