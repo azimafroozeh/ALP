@@ -7,7 +7,7 @@ add_library(ALP::BENCHMARKER ALIAS benchmarker)
 
 if (NOT DEFINED ENV{ALP_DATASET_DIR_PATH})
     message(WARNING "Set ALP_DATASET_DIR_PATH environment variable")
-    message(WARNING "Set HURRICANE_ISABEL_DATASET_DIR_PATH" environment variable)
+    message(WARNING "Set HURRICANE_ISABEL_DATASET_DIR_PATH environment variable") #https://sdrbench.github.io/
 else ()
     add_executable(test_compression_ratio test_compression_ratio.cpp)
     target_link_libraries(test_compression_ratio PUBLIC ALP::BENCHMARKER)

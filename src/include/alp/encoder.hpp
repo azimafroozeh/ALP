@@ -86,19 +86,19 @@ struct encoder {
 	 */
 	static void
 	find_best_exponent_factor_from_combinations(const std::vector<std::pair<uint8_t, uint8_t>>& top_combinations,
-	                                            const uint8_t                                   top_k,
+	                                            uint8_t                                         top_k,
 	                                            const PT*                                       input_vector,
-	                                            const uint16_t                                  input_vector_size,
+	                                            uint16_t                                        input_vector_size,
 	                                            uint8_t&                                        factor,
 	                                            uint8_t&                                        exponent);
 
-	static void encode_simdized(const PT*            input_vector,
-	                            PT*                  exceptions,
-	                            exp_p_t*             exceptions_positions,
-	                            exp_c_t*             exceptions_count,
-	                            ST*                  encoded_integers,
-	                            const factor_idx_t   factor_idx,
-	                            const exponent_idx_t exponent_idx);
+	static void encode_simdized(const PT*      input_vector,
+	                            PT*            exceptions,
+	                            exp_p_t*       exceptions_positions,
+	                            exp_c_t*       exceptions_count,
+	                            ST*            encoded_integers,
+	                            factor_idx_t   factor_idx,
+	                            exponent_idx_t exponent_idx);
 
 	static void encode(const PT*  input_vector,
 	                   PT*        exceptions,
@@ -107,8 +107,7 @@ struct encoder {
 	                   ST*        encoded_integers,
 	                   state<PT>& stt);
 
-	static void
-	init(const PT* data_column, const size_t column_offset, const size_t tuples_count, PT* sample_arr, state<PT>& stt);
+	static void init(const PT* data_column, size_t column_offset, size_t tuples_count, PT* sample_arr, state<PT>& stt);
 };
 
 } // namespace alp
