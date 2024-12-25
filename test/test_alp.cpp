@@ -118,7 +118,7 @@ public:
 		size_t         tuples_count {alp::config::VECTOR_SIZE};
 		size_t         rowgroup_offset {0};
 
-		PT      value_to_encode;
+		PT          value_to_encode;
 		std::string val_str;
 		// keep storing values from the text file so long as data exists:
 		size_t row_idx {0};
@@ -134,11 +134,11 @@ public:
 		}
 
 		// Init
-		alp::encoder<PT>::init(input_arr, rowgroup_offset, tuples_count, sample_arr, stt);
+		alp::encoder<PT>::init(input_arr, tuples_count, sample_arr, stt);
 
 		switch (stt.scheme) {
 		case alp::Scheme::ALP_RD: {
-			alp::rd_encoder<PT>::init(input_arr, rowgroup_offset, tuples_count, sample_arr, stt);
+			alp::rd_encoder<PT>::init(input_arr, tuples_count, sample_arr, stt);
 
 			alp::rd_encoder<PT>::encode(input_arr, rd_exc_arr, pos_arr, exc_c_arr, right_arr, left_arr, stt);
 			ffor::ffor(right_arr, ffor_right_arr, stt.right_bit_width, &stt.right_for_base);
