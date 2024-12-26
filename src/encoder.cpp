@@ -32,7 +32,7 @@ void encoder<PT>::encode(const PT*  input_vector,
 
 	if (stt.k_combinations > 1) { // Only if more than 1 found top combinations we sample and search
 		find_best_exponent_factor_from_combinations(
-		    stt.best_k_combinations, stt.k_combinations, input_vector, stt.vector_size, stt.fac, stt.exp);
+		    stt.best_k_combinations, stt.k_combinations, input_vector, stt.fac, stt.exp);
 	} else {
 		stt.exp = stt.best_k_combinations[0].first;
 		stt.fac = stt.best_k_combinations[0].second;
@@ -148,7 +148,6 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
     const std::vector<std::pair<uint8_t, uint8_t>>& top_combinations,
     const uint8_t                                   top_k,
     const PT*                                       input_vector,
-    const uint16_t                                  input_vector_size,
     uint8_t&                                        factor,
     uint8_t&                                        exponent) {
 	uint8_t  found_exponent {0};
@@ -157,7 +156,7 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 	uint8_t  worse_threshold_count {0};
 
 	const size_t sample_increments = std::max(
-	    static_cast<size_t>(1), static_cast<size_t>(std::ceil(input_vector_size / config::SAMPLES_PER_VECTOR)));
+	    static_cast<size_t>(1), static_cast<size_t>(std::ceil(config::VECTOR_SIZE / config::SAMPLES_PER_VECTOR)));
 
 	// We try each K combination in search for the one which minimize the compression size in the vector
 	for (size_t k {0}; k < top_k; k++) {
@@ -169,7 +168,7 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 		ST         max_encoded_value {std::numeric_limits<ST>::min()};
 		ST         min_encoded_value {std::numeric_limits<ST>::max()};
 
-		for (size_t sample_idx = 0; sample_idx < input_vector_size; sample_idx += sample_increments) {
+		for (size_t sample_idx = 0; sample_idx < config::VECTOR_SIZE; sample_idx += sample_increments) {
 			const PT actual_value  = input_vector[sample_idx];
 			const ST encoded_value = encode_value<PT, ST>(actual_value, factor_idx, exp_idx);
 			const PT decoded_value = decoder<PT>::decode_value(encoded_value, factor_idx, exp_idx);

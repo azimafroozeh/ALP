@@ -33,7 +33,6 @@ struct state {
 	using ST = typename inner_t<PT>::st;
 
 	Scheme   scheme {Scheme::INVALID};
-	uint16_t vector_size {config::VECTOR_SIZE};
 	uint16_t exceptions_count {0};
 	size_t   sampled_values_n {0};
 
@@ -88,7 +87,6 @@ struct encoder {
 	find_best_exponent_factor_from_combinations(const std::vector<std::pair<uint8_t, uint8_t>>& top_combinations,
 	                                            uint8_t                                         top_k,
 	                                            const PT*                                       input_vector,
-	                                            uint16_t                                        input_vector_size,
 	                                            uint8_t&                                        factor,
 	                                            uint8_t&                                        exponent);
 
