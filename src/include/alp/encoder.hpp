@@ -60,7 +60,7 @@ struct encoder {
 	static void encode(
 	    const PT* input_vector, PT* exceptions, uint16_t* exceptions_positions, ST* encoded_integers, state<PT>& stt);
 
-	static void init(const PT* rowgroup_data_p, size_t rowgroup_size, PT* sample_arr, state<PT>& stt);
+	static void init(const PT* rowgroup_data_p, uint64_t rowgroup_size, PT* sample_arr, state<PT>& stt);
 };
 
 } // namespace alp

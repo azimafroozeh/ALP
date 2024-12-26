@@ -52,7 +52,7 @@ void encoder<PT>::encode_simdized(
 
 	// make copy of input with all special values replaced by  ENCODING_UPPER_LIMIT
 	const auto* tmp_input = reinterpret_cast<const UT*>(data_p);
-	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+	for (uint64_t i {0}; i < config::VECTOR_SIZE; i++) {
 		const auto is_special =
 		    ((tmp_input[i] & Constants<PT>::SIGN_BIT_MASK) >=
 		     Constants<PT>::EXPONENTIAL_BITS_MASK) // any NaN, +inf and -inf
@@ -67,7 +67,7 @@ void encoder<PT>::encode_simdized(
 	}
 
 #pragma clang loop vectorize_width(64)
-	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+	for (uint64_t i {0}; i < config::VECTOR_SIZE; i++) {
 		auto const actual_value = VALUE_ARR_WITHOUT_SPECIALS[i];
 
 		// Attempt conversion
@@ -79,7 +79,7 @@ void encoder<PT>::encode_simdized(
 
 #ifdef __AVX512F__
 	if constexpr (std::is_same_v<PT, double>) {
-		for (size_t i {0}; i < config::VECTOR_SIZE; i = i + 8) {
+		for (uint64_t i {0}; i < config::VECTOR_SIZE; i = i + 8) {
 			__m512d l            = _mm512_loadu_pd(ENCODED_VALUE_ARR + i);
 			__m512d r            = _mm512_loadu_pd(VALUE_ARR_WITHOUT_SPECIALS + i);
 			__m512i index        = _mm512_loadu_pd(DOUBLE_INDEX_ARR + i);
@@ -88,7 +88,7 @@ void encoder<PT>::encode_simdized(
 			exceptions_idx += LOOKUP_TABLE[is_exception];
 		}
 	} else {
-		for (size_t i {0}; i < config::VECTOR_SIZE; i = i + 16) {
+		for (uint64_t i {0}; i < config::VECTOR_SIZE; i = i + 16) {
 			__m512   l            = _mm512_loadu_ps(ENCODED_VALUE_ARR + i);
 			__m512   r            = _mm512_loadu_ps(VALUE_ARR_WITHOUT_SPECIALS + i);
 			__m512i  index        = _mm512_loadu_si512(FLOAT_INDEX_ARR + i);
@@ -109,7 +109,7 @@ void encoder<PT>::encode_simdized(
 #endif
 
 	ST a_non_exception_value = 0;
-	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+	for (uint64_t i {0}; i < config::VECTOR_SIZE; i++) {
 		if (i != TMP_INDEX_ARR[i]) {
 			a_non_exception_value = encoded_integers[i];
 			break;
@@ -129,7 +129,7 @@ void encoder<PT>::encode_simdized(
 }
 
 template <typename PT>
-void encoder<PT>::init(const PT* rowgroup_data_p, const size_t rowgroup_size, PT* sample_arr, state<PT>& stt) {
+void encoder<PT>::init(const PT* rowgroup_data_p, const uint64_t rowgroup_size, PT* sample_arr, state<PT>& stt) {
 	stt.scheme           = Scheme::ALP;
 	stt.sampled_values_n = sampler::first_level_sample<PT>(rowgroup_data_p, rowgroup_size, sample_arr);
 	stt.k_combinations   = config::MAX_K_COMBINATIONS;
@@ -149,11 +149,11 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 	uint64_t best_estimated_compression_size {0};
 	uint8_t  worse_threshold_count {0};
 
-	const size_t sample_increments = std::max(
-	    static_cast<size_t>(1), static_cast<size_t>(std::ceil(config::VECTOR_SIZE / config::SAMPLES_PER_VECTOR)));
+	const uint64_t sample_increments = std::max(
+	    static_cast<uint64_t>(1), static_cast<uint64_t>(std::ceil(config::VECTOR_SIZE / config::SAMPLES_PER_VECTOR)));
 
 	// We try each K combination in search for the one which minimize the compression size in the vector
-	for (size_t k {0}; k < top_k; k++) {
+	for (uint64_t k {0}; k < top_k; k++) {
 		const auto exp_idx    = top_combinations[k].first;
 		const auto factor_idx = top_combinations[k].second;
 		uint32_t   exception_count {0};
@@ -162,7 +162,7 @@ void encoder<PT>::find_best_exponent_factor_from_combinations(
 		ST         max_encoded_value {std::numeric_limits<ST>::min()};
 		ST         min_encoded_value {std::numeric_limits<ST>::max()};
 
-		for (size_t sample_idx = 0; sample_idx < config::VECTOR_SIZE; sample_idx += sample_increments) {
+		for (uint64_t sample_idx = 0; sample_idx < config::VECTOR_SIZE; sample_idx += sample_increments) {
 			const PT actual_value  = input_vector[sample_idx];
 			const ST encoded_value = encode_value<PT, ST>(actual_value, factor_idx, exp_idx);
 			const PT decoded_value = decoder<PT>::decode_value(encoded_value, factor_idx, exp_idx);
@@ -212,9 +212,9 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 	uint64_t                           smp_offset {0};
 
 	// For each vector in the rg sample
-	size_t best_estimated_compression_size {(samples_size * (Constants<PT>::EXCEPTION_SIZE + EXCEPTION_POSITION_SIZE)) +
+	uint64_t best_estimated_compression_size {(samples_size * (Constants<PT>::EXCEPTION_SIZE + EXCEPTION_POSITION_SIZE)) +
 	                                        (samples_size * (Constants<PT>::EXCEPTION_SIZE))};
-	for (size_t smp_n = 0; smp_n < n_vectors_to_sample; smp_n++) {
+	for (uint64_t smp_n = 0; smp_n < n_vectors_to_sample; smp_n++) {
 		uint8_t found_factor {0};
 		uint8_t found_exponent {0};
 		// We start our optimization with the worst possible total bits obtained from compression
@@ -232,7 +232,7 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 				ST       max_encoded_value          = {std::numeric_limits<ST>::min()};
 				ST       min_encoded_value          = {std::numeric_limits<ST>::max()};
 
-				for (size_t i = 0; i < samples_size; i++) {
+				for (uint64_t i = 0; i < samples_size; i++) {
 					const PT actual_value  = smp_arr[smp_offset + i];
 					const ST encoded_value = encode_value<PT, ST>(
 					    actual_value, static_cast<uint8_t>(factor_idx), static_cast<uint8_t>(exp_ref));
@@ -298,7 +298,7 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 	}
 
 	// Save k' best exp, fac combination pairs
-	for (size_t i {0}; i < stt.k_combinations; i++) {
+	for (uint64_t i {0}; i < stt.k_combinations; i++) {
 		stt.best_k_combinations.push_back(best_k_combinations[i].first);
 	}
 }
@@ -315,7 +315,7 @@ void encoder<PT>::analyze_ffor(const ST* input_vector, bw_t& bit_width, ST* base
 	auto min = std::numeric_limits<ST>::max();
 	auto max = std::numeric_limits<ST>::min();
 
-	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+	for (uint64_t i {0}; i < config::VECTOR_SIZE; i++) {
 		if (input_vector[i] < min) { min = input_vector[i]; }
 		if (input_vector[i] > max) { max = input_vector[i]; }
 	}

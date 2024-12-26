@@ -6,8 +6,6 @@
 #include "alp/state.hpp"
 #include <cstdint>
 
-// NOLINTBEGIN
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wimplicit-int-float-conversion"
 
@@ -131,8 +129,6 @@ struct decoder {
 };
 
 } // namespace alp
-
-// NOLINTEND
 
 #pragma GCC diagnostic pop
 
