@@ -24,7 +24,7 @@ struct Constants<float> {
 	static inline constexpr float ENCODING_UPPER_LIMIT = 3.4028235e+38F;  // Largest finite float
 	static inline constexpr float ENCODING_LOWER_LIMIT = -3.4028235e+38F; // Smallest finite float
 	/// 22 bits per value * 32 values in the sampled vector
-	static inline constexpr size_t  RD_SIZE_THRESHOLD_LIMIT = 22 * alp::config::SAMPLES_PER_VECTOR;
+	static inline constexpr uint64_t  RD_SIZE_THRESHOLD_LIMIT = 22 * alp::config::SAMPLES_PER_VECTOR;
 	static inline constexpr float   MAGIC_NUMBER            = 12582912.0;
 	static inline constexpr uint8_t EXCEPTION_SIZE          = 32;
 	static inline constexpr uint8_t EXCEPTION_SIZE_BYTES    = EXCEPTION_SIZE / 8;
@@ -63,7 +63,7 @@ struct Constants<double> {
 	static inline constexpr double ENCODING_LOWER_LIMIT = -9223372036854774784;
 
 	/// 48 bits per value * 32 values in the sampled vector
-	static inline constexpr size_t  RD_SIZE_THRESHOLD_LIMIT = 48 * alp::config::SAMPLES_PER_VECTOR;
+	static inline constexpr uint64_t  RD_SIZE_THRESHOLD_LIMIT = 48 * alp::config::SAMPLES_PER_VECTOR;
 	static inline constexpr double  MAGIC_NUMBER {0x0018000000000000};
 	static inline constexpr uint8_t EXCEPTION_SIZE       = 64;
 	static inline constexpr uint8_t EXCEPTION_SIZE_BYTES = EXCEPTION_SIZE / 8;
