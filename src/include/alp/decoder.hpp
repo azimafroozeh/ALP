@@ -75,7 +75,7 @@ void sse_decode(const int64_t* digits, uint8_t fac_idx, uint8_t exp_idx, double*
 
 	auto digits_p = reinterpret_cast<const __m128i*>(digits);
 
-	for (size_t i {0}; i < 512; ++i) {
+	for (uint64_t i {0}; i < 512; ++i) {
 		__m128i digit       = _mm_loadu_si128(digits_p + i);
 		__m128i tmp_int     = digit * factor_sse;
 		__m128d tmp_dbl     = sse_int64_to_double(tmp_int);
@@ -92,7 +92,7 @@ void avx2_decode(const int64_t* digits, uint8_t fac_idx, uint8_t exp_idx, double
 
 	auto digits_p = reinterpret_cast<const __m256i*>(digits);
 
-	for (size_t i {0}; i < 256; ++i) {
+	for (uint64_t i {0}; i < 256; ++i) {
 		__m256i digit       = _mm256_loadu_si256(digits_p + i);
 		__m256i tmp_int     = digit * factor_sse;
 		__m256d tmp_dbl     = int64_to_double_fast_precise(tmp_int);
@@ -116,7 +116,7 @@ struct decoder {
 
 	//! Scalar decoding of an ALP vector
 	static inline void decode(const ST* encoded_integers, const uint8_t fac_idx, const uint8_t exp_idx, PT* output) {
-		for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
+		for (uint64_t i {0}; i < config::VECTOR_SIZE; i++) {
 			output[i] = decode_value(encoded_integers[i], fac_idx, exp_idx);
 		}
 	}
