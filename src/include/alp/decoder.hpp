@@ -1,7 +1,9 @@
 #ifndef ALP_DECODER_HPP
 #define ALP_DECODER_HPP
 
-#include "common.hpp"
+#include "alp/common.hpp"
+#include "alp/config.hpp"
+#include "alp/state.hpp"
 #include <cstdint>
 
 // NOLINTBEGIN
@@ -10,24 +12,6 @@
 #pragma GCC diagnostic ignored "-Wimplicit-int-float-conversion"
 
 namespace alp {
-
-// Default template, not defined intentionally
-template <typename T>
-struct inner_t;
-
-// Specialization for float -> uint32_t
-template <>
-struct inner_t<float> {
-	using ut = uint32_t;
-	using st = int32_t;
-};
-
-// Specialization for double -> uint64_t
-template <>
-struct inner_t<double> {
-	using ut = uint64_t;
-	using st = int64_t;
-};
 
 #ifdef AVX2
 #include "immintrin.h"
@@ -138,12 +122,9 @@ struct decoder {
 	}
 
 	//! Patch Exceptions
-	static inline void patch_exceptions(PT*            out,
-	                                    const PT*      exceptions,
-	                                    const exp_p_t* exceptions_positions,
-	                                    const exp_c_t* exceptions_count) {
-		const auto exp_c = exceptions_count[0];
-		for (exp_c_t i {0}; i < exp_c; i++) {
+	static inline void
+	patch_exceptions(PT* out, const PT* exceptions, const exp_p_t* exceptions_positions, const state<PT>& state) {
+		for (exp_c_t i {0}; i < state.n_exceptions; i++) {
 			out[exceptions_positions[i]] = exceptions[i];
 		}
 	}

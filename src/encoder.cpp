@@ -1,5 +1,9 @@
 #include "alp/encoder.hpp"
+#include "alp/constants.hpp"
+#include "alp/decoder.hpp"
+#include "alp/sampler.hpp"
 #include "fls/ffor_util.hpp"
+#include <algorithm>
 
 namespace alp {
 
@@ -23,12 +27,8 @@ ST encode_value(const PT value, const factor_idx_t factor_idx, const exponent_id
 }
 
 template <typename PT>
-void encoder<PT>::encode(const PT*  input_vector,
-                         PT*        exceptions,
-                         uint16_t*  exceptions_positions,
-                         uint16_t*  exceptions_count,
-                         ST*        encoded_integers,
-                         state<PT>& stt) {
+void encoder<PT>::encode(
+    const PT* input_vector, PT* exceptions, uint16_t* exceptions_positions, ST* encoded_integers, state<PT>& stt) {
 
 	if (stt.k_combinations > 1) { // Only if more than 1 found top combinations we sample and search
 		find_best_exponent_factor_from_combinations(
@@ -37,27 +37,21 @@ void encoder<PT>::encode(const PT*  input_vector,
 		stt.exp = stt.best_k_combinations[0].first;
 		stt.fac = stt.best_k_combinations[0].second;
 	}
-	encode_simdized(
-	    input_vector, exceptions, exceptions_positions, exceptions_count, encoded_integers, stt.fac, stt.exp);
+	encode_simdized(input_vector, exceptions, exceptions_positions, encoded_integers, stt);
 }
 
 template <typename PT>
-void encoder<PT>::encode_simdized(const PT*            input_vector,
-                                  PT*                  exceptions,
-                                  exp_p_t*             exceptions_positions,
-                                  exp_c_t*             exceptions_count,
-                                  ST*                  encoded_integers,
-                                  const factor_idx_t   factor_idx,
-                                  const exponent_idx_t exponent_idx) {
-	alignas(64) static PT ENCODED_VALUE_ARR[1024];
-	alignas(64) static PT VALUE_ARR_WITHOUT_SPECIALS[1024];
-	alignas(64) static UT TMP_INDEX_ARR[1024];
+void encoder<PT>::encode_simdized(
+    const PT* data_p, PT* exceptions, exp_p_t* exceptions_positions, ST* encoded_integers, state<PT>& stt) {
+	alignas(64) static PT ENCODED_VALUE_ARR[config::VECTOR_SIZE];
+	alignas(64) static PT VALUE_ARR_WITHOUT_SPECIALS[config::VECTOR_SIZE];
+	alignas(64) static UT TMP_INDEX_ARR[config::VECTOR_SIZE];
 
 	exp_p_t  current_exceptions_count {0};
 	uint64_t exceptions_idx {0};
 
 	// make copy of input with all special values replaced by  ENCODING_UPPER_LIMIT
-	const auto* tmp_input = reinterpret_cast<const UT*>(input_vector);
+	const auto* tmp_input = reinterpret_cast<const UT*>(data_p);
 	for (size_t i {0}; i < config::VECTOR_SIZE; i++) {
 		const auto is_special =
 		    ((tmp_input[i] & Constants<PT>::SIGN_BIT_MASK) >=
@@ -68,7 +62,7 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 		if (is_special) {
 			VALUE_ARR_WITHOUT_SPECIALS[i] = Constants<PT>::ENCODING_UPPER_LIMIT;
 		} else {
-			VALUE_ARR_WITHOUT_SPECIALS[i] = input_vector[i];
+			VALUE_ARR_WITHOUT_SPECIALS[i] = data_p[i];
 		}
 	}
 
@@ -77,9 +71,9 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 		auto const actual_value = VALUE_ARR_WITHOUT_SPECIALS[i];
 
 		// Attempt conversion
-		const ST encoded_value = encode_value<PT, ST>(actual_value, factor_idx, exponent_idx);
+		const ST encoded_value = encode_value<PT, ST>(actual_value, stt.fac, stt.exp);
 		encoded_integers[i]    = encoded_value;
-		const PT decoded_value = decoder<PT>::decode_value(encoded_value, factor_idx, exponent_idx);
+		const PT decoded_value = decoder<PT>::decode_value(encoded_value, stt.fac, stt.exp);
 		ENCODED_VALUE_ARR[i]   = decoded_value;
 	}
 
@@ -124,14 +118,14 @@ void encoder<PT>::encode_simdized(const PT*            input_vector,
 
 	for (exp_p_t j {0}; j < exceptions_idx; j++) {
 		auto       i                                   = static_cast<exp_p_t>(TMP_INDEX_ARR[j]);
-		const auto actual_value                        = input_vector[i];
+		const auto actual_value                        = data_p[i];
 		encoded_integers[i]                            = a_non_exception_value;
 		exceptions[current_exceptions_count]           = actual_value;
 		exceptions_positions[current_exceptions_count] = i;
 		current_exceptions_count                       = current_exceptions_count + 1;
 	}
 
-	*exceptions_count = current_exceptions_count;
+	stt.n_exceptions = current_exceptions_count;
 }
 
 template <typename PT>

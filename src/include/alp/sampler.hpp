@@ -12,14 +12,14 @@
 namespace alp::sampler {
 
 template <class PT>
-size_t first_level_sample(const PT* data_p, const size_t n_values, PT* sample_arr_p) {
-	const size_t portion_to_sample     = std::min(config::ROWGROUP_SIZE, n_values);
-	const size_t available_alp_vectors = std::ceil(static_cast<double>(portion_to_sample) / config::VECTOR_SIZE);
-	size_t       sample_idx            = 0;
-	size_t       data_idx              = 0;
+uint64_t first_level_sample(const PT* data_p, const uint64_t n_values, PT* sample_arr_p) {
+	const uint64_t portion_to_sample     = std::min(config::ROWGROUP_SIZE, n_values);
+	const uint64_t available_alp_vectors = std::ceil(static_cast<double>(portion_to_sample) / config::VECTOR_SIZE);
+	uint64_t       sample_idx            = 0;
+	uint64_t       data_idx              = 0;
 
-	for (size_t vector_idx = 0; vector_idx < available_alp_vectors; vector_idx++) {
-		const size_t n_values_in_cur_vector = std::min(n_values - data_idx, config::VECTOR_SIZE);
+	for (uint64_t vector_idx = 0; vector_idx < available_alp_vectors; vector_idx++) {
+		const uint64_t n_values_in_cur_vector = std::min(n_values - data_idx, config::VECTOR_SIZE);
 
 		//! We sample equidistant vectors; to do this we skip a fixed values of vectors
 		//! If we are not in the correct jump, we do not take sample from this vector
@@ -29,7 +29,7 @@ size_t first_level_sample(const PT* data_p, const size_t n_values, PT* sample_ar
 			continue;
 		}
 
-		const size_t n_sampled_increments = std::max(
+		const uint64_t n_sampled_increments = std::max(
 		    1,
 		    static_cast<int32_t>(std::ceil(static_cast<double>(n_values_in_cur_vector) / config::SAMPLES_PER_VECTOR)));
 
@@ -41,7 +41,7 @@ size_t first_level_sample(const PT* data_p, const size_t n_values, PT* sample_ar
 		}
 
 		// Storing the sample of that vector
-		for (size_t i = 0; i < n_values_in_cur_vector; i += n_sampled_increments) {
+		for (uint64_t i = 0; i < n_values_in_cur_vector; i += n_sampled_increments) {
 			sample_arr_p[sample_idx] = data_p[data_idx + i];
 			sample_idx++;
 		}

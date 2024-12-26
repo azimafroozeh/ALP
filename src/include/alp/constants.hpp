@@ -7,12 +7,6 @@
 
 namespace alp {
 
-enum class Scheme : uint8_t {
-	INVALID,
-	ALP_RD,
-	ALP,
-};
-
 inline constexpr uint8_t SAMPLING_EARLY_EXIT_THRESHOLD    = 2;
 inline constexpr uint8_t DICTIONARY_ELEMENT_SIZE_BYTES    = 2;
 inline constexpr uint8_t RD_EXCEPTION_POSITION_SIZE       = 16;

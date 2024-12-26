@@ -34,7 +34,6 @@ public:
 
 	uint16_t* rd_exc_arr {};
 	uint16_t* pos_arr {};
-	uint16_t* exc_c_arr {};
 	int64_t*  ffor_buf {};
 	int64_t*  unffor_arr {};
 	int64_t*  base_buf {};
@@ -69,7 +68,6 @@ public:
 		//
 		rd_exc_arr      = new uint16_t[alp::config::VECTOR_SIZE];
 		pos_arr         = new uint16_t[alp::config::VECTOR_SIZE];
-		exc_c_arr       = new uint16_t[alp::config::VECTOR_SIZE];
 		unffor_arr      = new int64_t[alp::config::VECTOR_SIZE];
 		left_arr        = new uint16_t[alp::config::VECTOR_SIZE];
 		ffor_left_arr   = new uint16_t[alp::config::VECTOR_SIZE];
@@ -84,7 +82,6 @@ public:
 		delete[] pos_arr;
 		delete[] encoded_buf;
 		delete[] decoded_buf;
-		delete[] exc_c_arr;
 		delete[] ffor_buf;
 		delete[] unffor_arr;
 		delete[] base_buf;
@@ -139,15 +136,14 @@ public:
 		case alp::Scheme::ALP_RD: {
 			alp::rd_encoder<PT>::init(input_arr, tuples_count, sample_arr, stt);
 
-			alp::rd_encoder<PT>::encode(input_arr, rd_exc_arr, pos_arr, exc_c_arr, right_arr, left_arr, stt);
+			alp::rd_encoder<PT>::encode(input_arr, rd_exc_arr, pos_arr, right_arr, left_arr, stt);
 			ffor::ffor(right_arr, ffor_right_arr, stt.right_bit_width, &stt.right_for_base);
 			ffor::ffor(left_arr, ffor_left_arr, stt.left_bit_width, &stt.left_for_base);
 
 			// Decode
 			unffor::unffor(ffor_right_arr, unffor_right_arr, stt.right_bit_width, &stt.right_for_base);
 			unffor::unffor(ffor_left_arr, unffor_left_arr, stt.left_bit_width, &stt.left_for_base);
-			alp::rd_encoder<PT>::decode(
-			    glue_arr, unffor_right_arr, unffor_left_arr, rd_exc_arr, pos_arr, exc_c_arr, stt);
+			alp::rd_encoder<PT>::decode(glue_arr, unffor_right_arr, unffor_left_arr, rd_exc_arr, pos_arr, stt);
 
 			for (size_t i = 0; i < alp::config::VECTOR_SIZE; ++i) {
 				auto l = input_arr[i];
@@ -160,21 +156,20 @@ public:
 		}
 		case alp::Scheme::ALP: {
 			// Encode
-			alp::encoder<PT>::encode(input_arr, exc_arr, pos_arr, exc_c_arr, encoded_arr, stt);
+			alp::encoder<PT>::encode(input_arr, exc_arr, pos_arr, encoded_arr, stt);
 			alp::encoder<PT>::analyze_ffor(encoded_arr, bit_width, base_arr);
 			ffor::ffor(encoded_arr, ffor_arr, bit_width, base_arr);
 
 			// Decode
 			generated::falp::fallback::scalar::falp(ffor_arr, dec_dbl_arr, bit_width, base_arr, stt.fac, stt.exp);
-			alp::decoder<PT>::patch_exceptions(dec_dbl_arr, exc_arr, pos_arr, exc_c_arr);
+			alp::decoder<PT>::patch_exceptions(dec_dbl_arr, exc_arr, pos_arr, stt);
 
 			// validation
-			auto exceptions_count = exc_c_arr[0];
 			for (size_t i = 0; i < alp::config::VECTOR_SIZE; ++i) {
 				test::ALP_ASSERT(input_arr[i], dec_dbl_arr[i]);
 			}
 
-			ASSERT_EQ(column.exceptions_count, exceptions_count);
+			ASSERT_EQ(column.exceptions_count, stt.n_exceptions);
 			ASSERT_EQ(column.bit_width, bit_width);
 		}
 		default:;

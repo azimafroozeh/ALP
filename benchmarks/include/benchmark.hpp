@@ -6,7 +6,7 @@
 #include "gtest/gtest.h"
 #include <unordered_map>
 
-using namespace alp::config; // NOLINT
+using namespace alp;       // NOLINT
 using namespace alp_bench; // NOLINT
 
 namespace alp_bench {
@@ -17,7 +17,7 @@ PT get_overhead_per_vector() {
 	                       8 +               // factor-idx
 	                       8 +               // exponent-idx
 	                       (sizeof(PT) * 8)) // ffor base
-	       / VECTOR_SIZE;
+	       / config::VECTOR_SIZE;
 };
 
 struct VectorMetadata {
@@ -45,14 +45,14 @@ inline std::string get_alp_scheme_string(alp::Scheme& scheme) {
 
 template <typename PT>
 const PT* get_data(const size_t rg_idx, const PT* data_column, const size_t vector_idx) {
-	size_t    offset = (rg_idx * N_VECTORS_PER_ROWGROUP + vector_idx) * VECTOR_SIZE;
+	size_t    offset = (rg_idx * config::N_VECTORS_PER_ROWGROUP + vector_idx) * config::VECTOR_SIZE;
 	const PT* data_p = data_column + offset;
 	return data_p;
 }
 
 template <typename PT>
 PT* get_data(size_t rg_idx, PT* data_column) {
-	size_t offset = (rg_idx * N_VECTORS_PER_ROWGROUP) * VECTOR_SIZE;
+	size_t offset = (rg_idx * config::N_VECTORS_PER_ROWGROUP) * config::VECTOR_SIZE;
 	PT*    data_p = data_column + offset;
 	return data_p;
 }
@@ -193,24 +193,24 @@ public:
 	~ALPBench() override = default;
 
 	void SetUp() override {
-		data_buf         = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		exc_buf          = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		pos_buf          = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		encoded_buf      = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		exc_c_buf        = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		ffor_buf         = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		base_buf         = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		right_buf        = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		left_buf         = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		ffor_right_buf   = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		ffor_left_buf    = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		unffor_right_buf = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		unffor_left_buf  = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		glue_buf         = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		sample_buf       = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		rd_exc_buf       = new (std::align_val_t {64}) uint16_t[VECTOR_SIZE];
-		unffor_buf       = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
-		decoded_buf      = new (std::align_val_t {64}) uint64_t[VECTOR_SIZE];
+		data_buf         = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		exc_buf          = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		pos_buf          = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		encoded_buf      = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		exc_c_buf        = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		ffor_buf         = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		base_buf         = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		right_buf        = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		left_buf         = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		ffor_right_buf   = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		ffor_left_buf    = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		unffor_right_buf = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		unffor_left_buf  = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		glue_buf         = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		sample_buf       = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		rd_exc_buf       = new (std::align_val_t {64}) uint16_t[config::VECTOR_SIZE];
+		unffor_buf       = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
+		decoded_buf      = new (std::align_val_t {64}) uint64_t[config::VECTOR_SIZE];
 	}
 
 	void TearDown() override {
@@ -263,22 +263,23 @@ public:
 	double calculate_alp_pde_compression_size(VectorMetadata& vector_metadata) {
 		double avg_bits_per_value {0};
 		avg_bits_per_value = avg_bits_per_value + vector_metadata.bit_width;
-		avg_bits_per_value = avg_bits_per_value +
-		                     (static_cast<double>(vector_metadata.exceptions_count) *
-		                      (alp::Constants<double>::EXCEPTION_SIZE + alp::EXCEPTION_POSITION_SIZE) / VECTOR_SIZE);
+		avg_bits_per_value =
+		    avg_bits_per_value +
+		    (static_cast<double>(vector_metadata.exceptions_count) *
+		     (alp::Constants<double>::EXCEPTION_SIZE + alp::EXCEPTION_POSITION_SIZE) / config::VECTOR_SIZE);
 
 		avg_bits_per_value = avg_bits_per_value + get_overhead_per_vector<PT>();
 		return avg_bits_per_value;
 	}
 
-	double alprd_overhead_per_vector {static_cast<double>(MAX_RD_DICTIONARY_SIZE * 16) / ROWGROUP_SIZE};
+	double alprd_overhead_per_vector {static_cast<double>(config::MAX_RD_DICTIONARY_SIZE * 16) / config::ROWGROUP_SIZE};
 
 	double calculate_alprd_compression_size(VectorMetadata& vector_metadata) {
 		double avg_bits_per_value {0};
 		avg_bits_per_value = avg_bits_per_value + vector_metadata.right_bit_width + vector_metadata.left_bit_width +
 		                     static_cast<double>(vector_metadata.exceptions_count *
 		                                         (alp::RD_EXCEPTION_SIZE + alp::RD_EXCEPTION_POSITION_SIZE)) /
-		                         VECTOR_SIZE;
+		                         config::VECTOR_SIZE;
 
 		avg_bits_per_value = avg_bits_per_value + alprd_overhead_per_vector;
 		return avg_bits_per_value;

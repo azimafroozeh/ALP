@@ -109,7 +109,6 @@ struct rd_encoder {
 	static inline void encode(const PT*  dbl_arr,
 	                          uint16_t*  exceptions,
 	                          uint16_t*  exception_positions,
-	                          uint16_t*  exceptions_count_p,
 	                          UT*        right_parts,
 	                          uint16_t*  left_parts,
 	                          state<PT>& stt) {
@@ -142,8 +141,7 @@ struct rd_encoder {
 				exceptions_count++;
 			}
 		}
-		stt.exceptions_count  = exceptions_count;
-		exceptions_count_p[0] = exceptions_count;
+		stt.n_exceptions = exceptions_count;
 	}
 
 	/*
@@ -154,7 +152,6 @@ struct rd_encoder {
 	                          uint16_t*  unffor_left_arr,
 	                          uint16_t*  exceptions,
 	                          uint16_t*  exceptions_positions,
-	                          uint16_t*  exceptions_count,
 	                          state<PT>& stt) {
 
 		auto* out         = reinterpret_cast<UT*>(a_out);
@@ -169,7 +166,7 @@ struct rd_encoder {
 		}
 
 		// Exceptions Patching (exceptions only occur in left parts)
-		auto exp_c = exceptions_count[0];
+		auto exp_c = stt.n_exceptions;
 		for (size_t i = 0; i < exp_c; i++) {
 			UT       right               = right_parts[exceptions_positions[i]];
 			uint16_t left                = exceptions[i];

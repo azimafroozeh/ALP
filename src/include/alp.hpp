@@ -8,7 +8,6 @@
 #include "alp/falp.hpp"
 #include "alp/rd.hpp"
 #include "alp/sampler.hpp"
-#include "alp/storer.hpp"
 #include "fls/ffor.hpp"
 #include "fls/unffor.hpp"
 

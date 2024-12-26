@@ -1,19 +1,11 @@
 #ifndef ALP_ENCODER_HPP
 #define ALP_ENCODER_HPP
 
+#include "alp/common.hpp"
 #include "alp/config.hpp"
-#include "alp/constants.hpp"
-#include "alp/decoder.hpp"
-#include "alp/sampler.hpp"
-#include "common.hpp"
-#include "constants.hpp"
-#include <cfloat>
-#include <cmath>
-#include <cstdint>
+#include "alp/state.hpp"
 #include <list>
 #include <map>
-#include <unordered_map>
-#include <utility>
 #include <vector>
 
 #ifdef __AVX2__
@@ -26,34 +18,6 @@
  * ALP Encoding
  */
 namespace alp {
-
-template <typename PT>
-struct state {
-	using UT = typename inner_t<PT>::ut;
-	using ST = typename inner_t<PT>::st;
-
-	Scheme   scheme {Scheme::INVALID};
-	uint16_t exceptions_count {0};
-	size_t   sampled_values_n {0};
-
-	// ALP
-	uint8_t                                  k_combinations {5};
-	std::vector<std::pair<uint8_t, uint8_t>> best_k_combinations;
-	uint8_t                                  exp {};
-	uint8_t                                  fac {};
-	bw_t                                     bit_width {};
-	ST                                       for_base {};
-
-	// ALP RD
-	bw_t                                   right_bit_width {0};
-	bw_t                                   left_bit_width {0};
-	UT                                     right_for_base {0}; // Always 0
-	uint16_t                               left_for_base {0};  // Always 0
-	uint16_t                               left_parts_dict[config::MAX_RD_DICTIONARY_SIZE] {};
-	uint8_t                                actual_dictionary_size {};
-	uint32_t                               actual_dictionary_size_bytes {};
-	std::unordered_map<uint16_t, uint16_t> left_parts_dict_map;
-};
 
 template <typename PT>
 struct encoder {
@@ -90,20 +54,11 @@ struct encoder {
 	                                            uint8_t&                                        factor,
 	                                            uint8_t&                                        exponent);
 
-	static void encode_simdized(const PT*      input_vector,
-	                            PT*            exceptions,
-	                            exp_p_t*       exceptions_positions,
-	                            exp_c_t*       exceptions_count,
-	                            ST*            encoded_integers,
-	                            factor_idx_t   factor_idx,
-	                            exponent_idx_t exponent_idx);
+	static void encode_simdized(
+	    const PT* data_p, PT* exceptions, exp_p_t* exceptions_positions, ST* encoded_integers, state<PT>& st);
 
-	static void encode(const PT*  input_vector,
-	                   PT*        exceptions,
-	                   uint16_t*  exceptions_positions,
-	                   uint16_t*  exceptions_count,
-	                   ST*        encoded_integers,
-	                   state<PT>& stt);
+	static void encode(
+	    const PT* input_vector, PT* exceptions, uint16_t* exceptions_positions, ST* encoded_integers, state<PT>& stt);
 
 	static void init(const PT* rowgroup_data_p, size_t rowgroup_size, PT* sample_arr, state<PT>& stt);
 };
