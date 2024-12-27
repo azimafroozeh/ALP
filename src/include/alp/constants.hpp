@@ -24,11 +24,11 @@ struct Constants<float> {
 	static inline constexpr float ENCODING_UPPER_LIMIT = 3.4028235e+38F;  // Largest finite float
 	static inline constexpr float ENCODING_LOWER_LIMIT = -3.4028235e+38F; // Smallest finite float
 	/// 22 bits per value * 32 values in the sampled vector
-	static inline constexpr uint64_t  RD_SIZE_THRESHOLD_LIMIT = 22 * alp::config::SAMPLES_PER_VECTOR;
-	static inline constexpr float   MAGIC_NUMBER            = 12582912.0;
-	static inline constexpr uint8_t EXCEPTION_SIZE          = 32;
-	static inline constexpr uint8_t EXCEPTION_SIZE_BYTES    = EXCEPTION_SIZE / 8;
-	static inline constexpr uint8_t MAX_EXPONENT            = 10;
+	static inline constexpr uint64_t RD_SIZE_THRESHOLD_LIMIT = 22 * alp::config::SAMPLES_PER_VECTOR;
+	static inline constexpr float    MAGIC_NUMBER            = 12582912.0;
+	static inline constexpr uint8_t  EXCEPTION_SIZE          = 32;
+	static inline constexpr uint8_t  EXCEPTION_SIZE_BYTES    = EXCEPTION_SIZE / 8;
+	static inline constexpr uint8_t  MAX_EXPONENT            = 10;
 
 	// -Inf: 11111111100000000000000000000000
 	// +Inf: 01111111100000000000000000000000
@@ -39,22 +39,23 @@ struct Constants<float> {
 	static constexpr uint32_t SIGN_BIT_MASK         = 0b01111111111111111111111111111111;
 	static constexpr uint32_t EXPONENTIAL_BITS_MASK = 0b01111111100000000000000000000000;
 
-	static constexpr float FRAC_ARR[] = {
+	static constexpr std::array<float, 11> FRAC_ARR = {
 	    1.0f, 0.1f, 0.01f, 0.001f, 0.0001f, 0.00001f, 0.000001f, 0.0000001f, 0.00000001f, 0.000000001f, 0.0000000001f};
 
-	static constexpr float EXP_ARR[] = {1.0f,
-	                                    10.0f,
-	                                    100.0f,
-	                                    1000.0f,
-	                                    10000.0f,
-	                                    100000.0f,
-	                                    1000000.0f,
-	                                    10000000.0f,
-	                                    100000000.0f,
-	                                    1000000000.0f,
-	                                    10000000000.0f};
+	static constexpr std::array<float, 11> EXP_ARR = {1.0f,
+	                                                  10.0f,
+	                                                  100.0f,
+	                                                  1000.0f,
+	                                                  10000.0f,
+	                                                  100000.0f,
+	                                                  1000000.0f,
+	                                                  10000000.0f,
+	                                                  100000000.0f,
+	                                                  1000000000.0f,
+	                                                  10000000000.0f};
 
-	static constexpr int32_t FACT_ARR[] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+	static constexpr std::array<int32_t, 10> FACT_ARR = {
+	    1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
 };
 
 template <>
@@ -63,11 +64,11 @@ struct Constants<double> {
 	static inline constexpr double ENCODING_LOWER_LIMIT = -9223372036854774784;
 
 	/// 48 bits per value * 32 values in the sampled vector
-	static inline constexpr uint64_t  RD_SIZE_THRESHOLD_LIMIT = 48 * alp::config::SAMPLES_PER_VECTOR;
-	static inline constexpr double  MAGIC_NUMBER {0x0018000000000000};
-	static inline constexpr uint8_t EXCEPTION_SIZE       = 64;
-	static inline constexpr uint8_t EXCEPTION_SIZE_BYTES = EXCEPTION_SIZE / 8;
-	static inline constexpr uint8_t MAX_EXPONENT         = 18;
+	static inline constexpr uint64_t RD_SIZE_THRESHOLD_LIMIT = 48 * alp::config::SAMPLES_PER_VECTOR;
+	static inline constexpr double   MAGIC_NUMBER {0x0018000000000000};
+	static inline constexpr uint8_t  EXCEPTION_SIZE       = 64;
+	static inline constexpr uint8_t  EXCEPTION_SIZE_BYTES = EXCEPTION_SIZE / 8;
+	static inline constexpr uint8_t  MAX_EXPONENT         = 18;
 
 	// -Inf: 1111111111110000000000000000000000000000000000000000000000000000
 	// +Inf: 0111111111110000000000000000000000000000000000000000000000000000
@@ -79,7 +80,7 @@ struct Constants<double> {
 	static constexpr uint64_t EXPONENTIAL_BITS_MASK =
 	    0b01111111111100000000000000000000000000000000000000000000000000000;
 
-	static inline constexpr double FRAC_ARR[] = {
+	static constexpr std::array<double, 21> FRAC_ARR = {
 	    1.0,
 	    0.1,
 	    0.01,
@@ -103,7 +104,7 @@ struct Constants<double> {
 	    0.00000000000000000001,
 	};
 
-	static inline constexpr double EXP_ARR[] = {
+	static inline constexpr std::array<double, 24> EXP_ARR = {
 	    1.0,
 	    10.0,
 	    100.0,
@@ -129,25 +130,25 @@ struct Constants<double> {
 	    10000000000000000000000.0,
 	    100000000000000000000000.0,
 	};
-	static constexpr int64_t FACT_ARR[] = {1,
-	                                       10,
-	                                       100,
-	                                       1000,
-	                                       10000,
-	                                       100000,
-	                                       1000000,
-	                                       10000000,
-	                                       100000000,
-	                                       1000000000,
-	                                       10000000000,
-	                                       100000000000,
-	                                       1000000000000,
-	                                       10000000000000,
-	                                       100000000000000,
-	                                       1000000000000000,
-	                                       10000000000000000,
-	                                       100000000000000000,
-	                                       1000000000000000000};
+	static constexpr std::array<int64_t, 19> FACT_ARR = {1,
+	                                                     10,
+	                                                     100,
+	                                                     1000,
+	                                                     10000,
+	                                                     100000,
+	                                                     1000000,
+	                                                     10000000,
+	                                                     100000000,
+	                                                     1000000000,
+	                                                     10000000000,
+	                                                     100000000000,
+	                                                     1000000000000,
+	                                                     10000000000000,
+	                                                     100000000000000,
+	                                                     1000000000000000,
+	                                                     10000000000000000,
+	                                                     100000000000000000,
+	                                                     1000000000000000000};
 };
 
 alignas(64) inline constexpr uint64_t DOUBLE_INDEX_ARR[1024] {
