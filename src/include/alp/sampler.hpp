@@ -2,23 +2,18 @@
 #define ALP_SAMPLER_HPP
 
 #include "alp/config.hpp"
-#include <algorithm>
 #include <cmath>
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
 
 namespace alp::sampler {
 
 template <class PT>
 uint64_t first_level_sample(const PT* data_p, const uint64_t n_values, PT* sample_arr_p) {
-	const uint64_t portion_to_sample     = std::min(config::ROWGROUP_SIZE, n_values);
-	const uint64_t available_alp_vectors = std::ceil(static_cast<double>(portion_to_sample) / config::VECTOR_SIZE);
-	uint64_t       sample_idx            = 0;
-	uint64_t       data_idx              = 0;
+	const uint64_t rowgroup_size = std::min(config::ROWGROUP_SIZE, n_values);
+	const uint64_t n_vectors     = (rowgroup_size + config::VECTOR_SIZE - 1) / config::VECTOR_SIZE;
+	uint64_t       sample_idx    = 0;
+	uint64_t       data_idx      = 0;
 
-	for (uint64_t vector_idx = 0; vector_idx < available_alp_vectors; vector_idx++) {
+	for (uint64_t vector_idx = 0; vector_idx < n_vectors; vector_idx++) {
 		const uint64_t n_values_in_cur_vector = std::min(n_values - data_idx, config::VECTOR_SIZE);
 
 		//! We sample equidistant vectors; to do this we skip a fixed values of vectors
@@ -29,9 +24,9 @@ uint64_t first_level_sample(const PT* data_p, const uint64_t n_values, PT* sampl
 			continue;
 		}
 
-		const uint64_t n_sampled_increments = std::max(
+		const uint64_t n_sampled_increments = std::max<uint64_t>(
 		    1,
-		    static_cast<int32_t>(std::ceil(static_cast<double>(n_values_in_cur_vector) / config::SAMPLES_PER_VECTOR)));
+		    static_cast<uint64_t>(std::ceil(static_cast<double>(n_values_in_cur_vector) / config::SAMPLES_PER_VECTOR)));
 
 		//! We do not take samples of non-complete duckdb vectors (usually the last one)
 		//! Except in the case of too little data
@@ -51,7 +46,5 @@ uint64_t first_level_sample(const PT* data_p, const uint64_t n_values, PT* sampl
 }
 
 } // namespace alp::sampler
-
-#pragma GCC diagnostic pop
 
 #endif
