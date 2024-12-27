@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#define N_VECTORS_PER_ROWGROUP_MACRO 100UL // Default value
+
 /*
  * ALP Configs
  */
@@ -13,7 +15,7 @@ public:
 	/// ALP Vector size (We recommend against changing this; it should be constant)
 	static constexpr uint64_t VECTOR_SIZE = 1024;
 	/// number of vectors per rowgroup
-	static constexpr uint64_t N_VECTORS_PER_ROWGROUP = 64UL;
+	static constexpr uint64_t N_VECTORS_PER_ROWGROUP = N_VECTORS_PER_ROWGROUP_MACRO;
 	/// Rowgroup size
 	static constexpr uint64_t ROWGROUP_SIZE = N_VECTORS_PER_ROWGROUP * VECTOR_SIZE;
 	/// Vectors from the rowgroup from which to take samples; this will be used to then calculate the jumps
