@@ -7,6 +7,9 @@
 #define ALP_N_VECTORS_PER_ROWGROUP 100UL // Default value
 #endif
 
+#ifndef ALP_IS_ADAPTIVE_MODE_ENABLED
+#define ALP_IS_ADAPTIVE_MODE_ENABLED true // Default value
+#endif
 /*
  * ALP Configs
  */
@@ -27,10 +30,11 @@ public:
 	/// Values to sample per vector
 	static constexpr uint64_t SAMPLES_PER_VECTOR = 32;
 	/// Maximum number of combinations obtained from row group sampling
-	static constexpr uint64_t MAX_K_COMBINATIONS     = 5;
-	static constexpr uint64_t CUTTING_LIMIT          = 16;
-	static constexpr uint64_t MAX_RD_DICT_BIT_WIDTH  = 3;
-	static constexpr uint64_t MAX_RD_DICTIONARY_SIZE = (1 << MAX_RD_DICT_BIT_WIDTH);
+	static constexpr uint64_t MAX_K_COMBINATIONS       = 5;
+	static constexpr uint64_t CUTTING_LIMIT            = 16;
+	static constexpr uint64_t MAX_RD_DICT_BIT_WIDTH    = 3;
+	static constexpr uint64_t MAX_RD_DICTIONARY_SIZE   = (1 << MAX_RD_DICT_BIT_WIDTH);
+	static constexpr bool     IS_ADAPTIVE_MODE_ENABLED = ALP_IS_ADAPTIVE_MODE_ENABLED;
 };
 
 // Default template, not defined intentionally

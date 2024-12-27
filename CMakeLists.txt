@@ -11,6 +11,7 @@ option(ALP_BUILD_TESTING "Build Testing" OFF)
 option(ALP_BUILD_BENCHMARKING "Build Benchmarking" OFF)
 option(ALP_ENABLE_CLANG_TIDY "Enable clang_tidy on all targets" ON)
 option(ALP_ENABLE_VERBOSE_OUTPUT "Enable verbose output" OFF)
+option(ALP_ENABLE_ADAPTIVE_MODE "Enable adaptive mode" ON)
 
 #-----------------------------------------------------------------------------------------------------------------------
 include(FetchContent)
@@ -20,6 +21,16 @@ include(CMakePrintHelpers)
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
 include(GoogleTest)
+
+# Adaptivity : ---------------------------------------------------------------------------------------------------------
+if (ALP_ENABLE_ADAPTIVE_MODE)
+    message("---------------------------------------------------------------------------------------------------------")
+    add_compile_definitions(ALP_IS_ADAPTIVE_MODE_ENABLED=true)
+    message("-- ALP: adaptive mode is enabled.")
+else ()
+    add_compile_definitions(ALP_IS_ADAPTIVE_MODE_ENABLED=false)
+    message("-- ALP: adaptive mode is disabled.")
+endif ()
 
 # Verbose : ------------------------------------------------------------------------------------------------------------
 if (ALP_ENABLE_VERBOSE_OUTPUT)

@@ -280,7 +280,7 @@ void encoder<PT>::find_top_k_combinations(const PT* smp_arr, state<PT>& stt) {
 	}
 
 	// We adapt scheme if we were not able to achieve compression in the current rg
-	if (best_estimated_compression_size >= Constants<PT>::RD_SIZE_THRESHOLD_LIMIT) {
+	if (config::IS_ADAPTIVE_MODE_ENABLED && best_estimated_compression_size >= Constants<PT>::RD_SIZE_THRESHOLD_LIMIT) {
 		stt.scheme = Scheme::ALP_RD;
 		return;
 	}
