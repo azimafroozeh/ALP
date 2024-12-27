@@ -316,4 +316,6 @@ template void ALPBench::typed_bench_dataset<float, 4ul>(std::array<ALPColumnDesc
                                                         const std::string&                 result_file_path);
 template void ALPBench::typed_bench_dataset<float, 20ul>(std::array<ALPColumnDescriptor, 20> columns,
                                                          const std::string&                  result_file_path);
+template void ALPBench::typed_bench_dataset<double, 1>(std::array<ALPColumnDescriptor, 1> columns,
+                                                       const std::string&                 result_file_path);
 } // namespace alp_bench

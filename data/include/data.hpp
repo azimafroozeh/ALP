@@ -3,6 +3,7 @@
 
 #include "column.hpp"
 #include "double/double_dataset.hpp"
+#include "double/public_bi.hpp"
 #include "edge_case.hpp"
 #include "evalimplsts.hpp"
 #include "float/float_dataset.hpp"

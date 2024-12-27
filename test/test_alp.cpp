@@ -48,6 +48,33 @@ public:
 
 	alp::bw_t bit_width {};
 
+	template <typename PT>
+	void read_file_into_vector(const std::string& file_path, std::vector<PT>& input_arr) {
+		std::ifstream file(file_path);
+		if (!file.is_open()) { throw std::runtime_error("Failed to open file"); }
+
+		std::string val_str;
+		size_t      row_idx = 0;
+
+		while (std::getline(file, val_str)) { // Use std::getline to ensure reading line by line
+			if (!val_str.empty()) {           // Skip empty lines if any
+				PT value_to_encode;
+				if constexpr (std::is_same_v<PT, double>) {
+					value_to_encode = std::stod(val_str);
+				} else if constexpr (std::is_same_v<PT, float>) {
+					value_to_encode = std::stof(val_str);
+				} else {
+					throw std::invalid_argument("Unsupported type");
+				}
+				if (row_idx >= input_arr.size()) {
+					input_arr.resize(row_idx + 1); // Expand the array dynamically if needed
+				}
+				input_arr[row_idx] = value_to_encode;
+				row_idx += 1;
+			}
+		}
+	}
+
 	void SetUp() override {
 		intput_buf    = new double[alp::config::VECTOR_SIZE];
 		sample_buf    = new double[alp::config::VECTOR_SIZE];
@@ -96,7 +123,6 @@ public:
 		using UT = typename alp::inner_t<PT>::ut;
 		using ST = typename alp::inner_t<PT>::st;
 
-		auto* input_arr        = reinterpret_cast<PT*>(intput_buf);
 		auto* sample_arr       = reinterpret_cast<PT*>(sample_buf);
 		auto* right_arr        = reinterpret_cast<UT*>(right_buf);
 		auto* ffor_right_arr   = reinterpret_cast<UT*>(ffor_right_buf);
@@ -108,26 +134,12 @@ public:
 		auto* base_arr         = reinterpret_cast<ST*>(base_buf);
 		auto* ffor_arr         = reinterpret_cast<ST*>(ffor_buf);
 
-		std::ifstream file(column.csv_file_path, std::ios::in);
-		if (!file) { throw std::runtime_error(column.csv_file_path + " : " + strerror(errno)); }
-
 		alp::state<PT> stt;
 		size_t         tuples_count {alp::config::VECTOR_SIZE};
 
-		PT          value_to_encode;
-		std::string val_str;
-		// keep storing values from the text file so long as data exists:
-		size_t row_idx {0};
-		while (file >> val_str) {
-			if constexpr (std::is_same_v<PT, double>) {
-				value_to_encode = std::stod(val_str);
-			} else {
-				value_to_encode = std::stof(val_str);
-			}
-
-			input_arr[row_idx] = value_to_encode;
-			row_idx += 1;
-		}
+		std::vector<PT> data;
+		read_file_into_vector<PT>(column.csv_file_path, data);
+		const auto*     input_arr = data.data();
 
 		// Init
 		alp::encoder<PT>::init(input_arr, tuples_count, sample_arr, stt);
@@ -176,8 +188,6 @@ public:
 		}
 
 		std::cout << "\033[32m-- " << column.name << '\n';
-
-		file.close();
 	}
 };
 

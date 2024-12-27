@@ -17,7 +17,11 @@ TEST_F(ALPBench, bench_alp_on_hurricane_isabel) {
 }
 
 TEST_F(ALPBench, bench_alp_on_issue_24) {
-	auto result_path =
-	    alp_bench::get_paths().alp_result_dir_path + "compression_ratio/double/issue_24.csv";
+	auto result_path = alp_bench::get_paths().alp_result_dir_path + "compression_ratio/double/issue_24.csv";
 	typed_bench_dataset<double>(alp_bench::get_issue_dataset(), result_path);
+}
+
+TEST_F(ALPBench, bench_alp_on_public_bi) {
+	std::string result_path = alp_bench::get_paths().alp_result_dir_path + "compression_ratio/double/public_bi.csv";
+	typed_bench_dataset<double>(alp_bench::get_public_bi_dataset(), result_path);
 }
