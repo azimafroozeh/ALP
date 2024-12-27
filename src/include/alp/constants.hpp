@@ -2,6 +2,7 @@
 #define ALP_CONSTANTS_HPP
 
 #include "alp/config.hpp"
+#include <array>
 #include <cstdint>
 #include <vector>
 
